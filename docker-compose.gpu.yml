@@ -1,0 +1,19 @@
+services:
+  ollama:
+    # Requires NVIDIA Container Toolkit and a supported GPU on the host.
+    gpus: all
+    environment:
+      OLLAMA_KEEP_ALIVE: 30m
+      OLLAMA_NUM_PARALLEL: 1
+
+  api-gateway:
+    environment:
+      # Keep defaults consistent in GPU mode; tune if needed.
+      OLLAMA_NUM_PREDICT: 256
+      OLLAMA_NUM_CTX: 4096
+      OLLAMA_TEMPERATURE: 0.65
+      OLLAMA_TOP_P: 0.9
+      OLLAMA_TOP_K: 40
+      OLLAMA_REPEAT_PENALTY: 1.08
+      OLLAMA_NUM_GPU: -1
+      OLLAMA_THINK: "false"

@@ -1,0 +1,157 @@
+{
+  "info": {
+    "_postman_id": "9f81da35-2f2a-4dcc-84a6-a2f87a4f2f98",
+    "name": "Customer Support Chatbot API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "session_id",
+      "value": ""
+    },
+    {
+      "key": "session_id_token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Create Session",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "description": "Creates a new conversation session and returns a session_id. Success means HTTP 200 and a non-empty session_id string.",
+        "url": {
+          "raw": "{{base_url}}/api/sessions",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "sessions"
+          ]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set(\"session_id\", pm.response.json().session_id);",
+              "pm.collectionVariables.set(\"session_id_token\", pm.response.json().token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "description": "Checks API gateway health. Success means HTTP 200 and status=ok.",
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "health"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Reset Session",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "description": "Resets the existing session history while keeping the same session_id. Success means HTTP 200 and success=true.",
+        "url": {
+          "raw": "{{base_url}}/api/sessions/{{session_id}}/reset",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "sessions",
+            "{{session_id}}",
+            "reset"
+          ]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (!pm.collectionVariables.get(\"session_id\")) {",
+              "  console.warn(\"session_id is empty. Run Create Session first.\");",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete Session",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "description": "Deletes an existing session_id. Success means HTTP 200 and success=true.",
+        "url": {
+          "raw": "{{base_url}}/api/sessions/{{session_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "sessions",
+            "{{session_id}}"
+          ]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (!pm.collectionVariables.get(\"session_id\")) {",
+              "  console.warn(\"session_id is empty. Run Create Session first.\");",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "WebSocket note",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "description": "Documentation-only request. To test WebSocket, open Postman WebSocket tab and connect to ws://localhost:8000/ws/chat/{{session_id}}?token={{session_id_token}}. Both variables are auto-populated by the Create Session request. Send JSON: {\"type\":\"user_message\",\"content\":\"Where is my order?\"}. Expect stream events: token, done, or error.",
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "health"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

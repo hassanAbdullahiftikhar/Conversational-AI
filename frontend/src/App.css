@@ -1,0 +1,208 @@
+:root {
+  --bg: #f0f4f7;
+  --surface: #ffffff;
+  --header-start: #092633;
+  --header-end: #0f6f79;
+  --text: #1a2a30;
+  --text-muted: #566068;
+  --accent: #0f6f79;
+  --accent-strong: #0a4f56;
+  --accent-light: #e4f3f5;
+  --border: #d0dfe3;
+  --shadow: rgba(9, 38, 51, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", "Inter", "Trebuchet MS", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+.app-shell {
+  width: min(960px, 100%);
+  background: var(--surface);
+  border-radius: 20px;
+  box-shadow: 0 4px 40px var(--shadow);
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 40px);
+  overflow: hidden;
+}
+
+/* ── Header ─────────────────────────────── */
+.app-header {
+  background: linear-gradient(135deg, var(--header-start) 0%, var(--header-end) 100%);
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -1px;
+  flex-shrink: 0;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.brand-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+}
+
+.brand-tagline {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 20px;
+  padding: 5px 11px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-badge.online .status-dot {
+  background: #4ade80;
+  box-shadow: 0 0 5px #4ade8080;
+}
+
+.status-badge.offline .status-dot {
+  background: #f87171;
+}
+
+/* ── Input area ─────────────────────────── */
+.input-area {
+  padding: 14px 18px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
+}
+
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+.input-row input {
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--surface);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-row input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(15, 111, 121, 0.12);
+}
+
+.input-row input::placeholder {
+  color: var(--text-muted);
+}
+
+.send-btn {
+  border: 0;
+  border-radius: 12px;
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
+  padding: 12px 22px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.send-btn:hover:not(:disabled) {
+  background: var(--accent-strong);
+  transform: translateY(-1px);
+}
+
+.send-btn:disabled {
+  background: #a8b9be;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Responsive ─────────────────────────── */
+@media (max-width: 640px) {
+  #root {
+    padding: 0;
+  }
+
+  .app-shell {
+    border-radius: 0;
+    min-height: 100vh;
+  }
+
+  .app-header {
+    padding: 12px 14px;
+  }
+
+  .brand-tagline {
+    display: none;
+  }
+}

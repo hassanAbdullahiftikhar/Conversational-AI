@@ -1,0 +1,42 @@
+services:
+  ollama:
+    image: ollama/ollama
+    environment:
+      OLLAMA_KEEP_ALIVE: 30m
+    volumes:
+      - ollama_data:/root/.ollama
+
+  conv-manager:
+    build: ./conv-manager
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8000:8000"
+    environment:
+      CONV_MANAGER_URL: http://conv-manager:8001
+      OLLAMA_URL: http://ollama:11434
+      OLLAMA_MODEL: qwen3.5:2b-q4_K_M
+      OLLAMA_NUM_PREDICT: 256
+      OLLAMA_NUM_CTX: 4096
+      OLLAMA_TEMPERATURE: 0.65
+      OLLAMA_TOP_P: 0.9
+      OLLAMA_TOP_K: 40
+      OLLAMA_REPEAT_PENALTY: 1.08
+      OLLAMA_NUM_GPU: -1
+      OLLAMA_THINK: "false"
+      OLLAMA_KEEP_ALIVE: 30m
+      OLLAMA_WARMUP_ON_STARTUP: "true"
+    depends_on:
+      - ollama
+      - conv-manager
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - api-gateway
+
+volumes:
+  ollama_data:

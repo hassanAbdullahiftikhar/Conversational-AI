@@ -95,6 +95,16 @@ class SessionStore:
                 return
             session["turns"] = list(turns)
 
+    def compact_turns(self, session_id: str, original_count: int, replacement: list[dict]) -> None:
+        """Replace the first `original_count` turns with `replacement`, preserving any newer turns added since."""
+        with self._lock:
+            session = self._sessions.get(session_id)
+            if session is None:
+                return
+            current_turns = session["turns"]
+            new_turns = current_turns[original_count:]
+            session["turns"] = list(replacement) + new_turns
+
     def get_memory_summary(self, session_id: str) -> tuple[str, str]:
         with self._lock:
             session = self._sessions.get(session_id)

@@ -2,17 +2,22 @@ from __future__ import annotations
 
 import hashlib
 import hmac
+import logging
 import os
 import uuid
 
 import httpx
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 from fastapi.responses import JSONResponse
 
 router = APIRouter()
 CONV_MANAGER_URL = os.getenv("CONV_MANAGER_URL", "http://conv-manager:8001")
 # Secret used to sign session tokens. Override in production via env var.
-_SECRET = os.getenv("SESSION_SECRET", "change-me-in-production").encode()
+_logger = logging.getLogger("api-gateway.session")
+_RAW_SECRET = os.getenv("SESSION_SECRET", "change-me-in-production")
+if _RAW_SECRET == "change-me-in-production":
+    _logger.warning("SESSION_SECRET is using the default value — override via env var in production")
+_SECRET = _RAW_SECRET.encode()
 
 
 def _make_token(session_id: str) -> str:
@@ -48,7 +53,9 @@ async def create_session() -> dict:
 
 
 @router.delete("/api/sessions/{session_id}")
-async def delete_session(session_id: str) -> dict:
+async def delete_session(session_id: str, token: str = Query(default="")) -> dict:
+    if not token or not verify_session_token(session_id, token):
+        return JSONResponse(status_code=401, content={"error": "unauthorized"})
     try:
         async with httpx.AsyncClient(timeout=httpx.Timeout(5.0)) as client:
             response = await client.delete(
@@ -66,7 +73,9 @@ async def delete_session(session_id: str) -> dict:
 
 
 @router.post("/api/sessions/{session_id}/reset")
-async def reset_session(session_id: str) -> dict:
+async def reset_session(session_id: str, token: str = Query(default="")) -> dict:
+    if not token or not verify_session_token(session_id, token):
+        return JSONResponse(status_code=401, content={"error": "unauthorized"})
     try:
         async with httpx.AsyncClient(timeout=httpx.Timeout(5.0)) as client:
             response = await client.post(

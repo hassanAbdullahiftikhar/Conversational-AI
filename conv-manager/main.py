@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import logging
 
 from fastapi import Depends, FastAPI
@@ -21,6 +22,14 @@ _history = HistoryManager(_store)
 _summarizer = MemorySummarizer()
 _prompt_builder = PromptBuilder()
 _policy_enforcer = PolicyEnforcer()
+
+
+async def _safe_compact(session_id: str) -> None:
+    """Run memory compaction in the background; log but swallow errors."""
+    try:
+        await _history.compact_memory(session_id, _summarizer)
+    except Exception:
+        logger.exception("action=compact_memory_failed session_id=%s", session_id)
 
 
 class BuildPromptRequest(BaseModel):
@@ -78,7 +87,7 @@ async def update_history(payload: UpdateHistoryRequest) -> dict:
         _history.add_turn(payload.session_id, payload.role, payload.content)
 
         if payload.role == "assistant":
-            await _history.compact_memory(payload.session_id, _summarizer)
+            asyncio.create_task(_safe_compact(payload.session_id))
 
         turn_count = len(_store.get_turns(payload.session_id))
         return {"success": True, "turn_count": turn_count}

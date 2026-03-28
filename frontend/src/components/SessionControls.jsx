@@ -4,11 +4,13 @@ import "./SessionControls.css";
 export default function SessionControls({ onNewSession, onReset, isConnected }) {
   return (
     <div className="session-controls">
-      <button type="button" onClick={onNewSession} disabled={!isConnected}>
-        New Chat
+      <button type="button" className="session-control-button" onClick={onNewSession} disabled={!isConnected}>
+        <span className="session-control-icon">+</span>
+        <span>New Chat</span>
       </button>
-      <button type="button" onClick={onReset} disabled={!isConnected}>
-        Clear
+      <button type="button" className="session-control-button ghost" onClick={onReset} disabled={!isConnected}>
+        <span className="session-control-icon">x</span>
+        <span>Clear</span>
       </button>
     </div>
   );

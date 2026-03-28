@@ -1,0 +1,72 @@
+.mic-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(35, 94, 109, 0.14);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(228, 242, 246, 0.94));
+  box-shadow: 0 10px 24px rgba(24, 74, 87, 0.12);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  flex-shrink: 0;
+}
+
+.mic-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(24, 74, 87, 0.16);
+  border-color: rgba(17, 108, 128, 0.28);
+}
+
+.mic-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.mic-button.recording {
+  background: linear-gradient(180deg, rgba(255, 239, 239, 1), rgba(255, 220, 220, 1));
+  border-color: rgba(220, 38, 38, 0.28);
+}
+
+.mic-button.processing {
+  background: linear-gradient(180deg, rgba(244, 251, 252, 1), rgba(228, 242, 246, 1));
+}
+
+.mic-button-ring {
+  position: absolute;
+  inset: -7px;
+  border-radius: 22px;
+  border: 2px solid rgba(220, 38, 38, 0.72);
+  animation: mic-pulse 1.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.mic-button-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid rgba(188, 211, 218, 1);
+  border-top-color: rgba(15, 111, 121, 1);
+  border-radius: 50%;
+  animation: mic-spin 0.8s linear infinite;
+}
+
+.mic-button svg {
+  transition: transform 0.18s ease;
+}
+
+.mic-button:hover:not(:disabled) svg {
+  transform: scale(1.04);
+}
+
+@keyframes mic-pulse {
+  0% { transform: scale(1); opacity: 0.65; }
+  50% { transform: scale(1.18); opacity: 0.18; }
+  100% { transform: scale(1); opacity: 0.65; }
+}
+
+@keyframes mic-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

@@ -1,0 +1,89 @@
+.voice-panel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 12px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.08));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.voice-panel-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding-right: 4px;
+}
+
+.voice-panel-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: rgba(255, 255, 255, 0.7);
+  white-space: nowrap;
+}
+
+.voice-chip,
+.voice-toggle {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  padding: 5px 12px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.voice-chip.active,
+.voice-toggle.active {
+  background: rgba(255, 255, 255, 0.94);
+  color: #0f6f79;
+  border-color: transparent;
+}
+
+.voice-chip:hover:not(:disabled),
+.voice-toggle:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+}
+
+.voice-chip.active:hover:not(:disabled),
+.voice-toggle.active:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 1);
+  color: #0f6f79;
+}
+
+.voice-speed-select {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  outline: none;
+  min-width: 78px;
+}
+
+.voice-speed-select:disabled,
+.voice-chip:disabled,
+.voice-toggle:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .voice-panel {
+    width: 100%;
+    justify-content: flex-start;
+    border-radius: 16px;
+  }
+}

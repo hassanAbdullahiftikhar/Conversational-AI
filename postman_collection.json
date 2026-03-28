@@ -14,7 +14,7 @@
       "value": ""
     },
     {
-      "key": "session_id_token",
+      "key": "session_token",
       "value": ""
     }
   ],
@@ -44,7 +44,7 @@
             "type": "text/javascript",
             "exec": [
               "pm.collectionVariables.set(\"session_id\", pm.response.json().session_id);",
-              "pm.collectionVariables.set(\"session_id_token\", pm.response.json().token);"
+              "pm.collectionVariables.set(\"session_token\", pm.response.json().token);"
             ]
           }
         }
@@ -73,9 +73,9 @@
       "request": {
         "method": "POST",
         "header": [],
-        "description": "Resets the existing session history while keeping the same session_id. Success means HTTP 200 and success=true.",
+        "description": "Resets the existing session history while keeping the same session_id. Requires the session token as a query parameter. Success means HTTP 200 and success=true.",
         "url": {
-          "raw": "{{base_url}}/api/sessions/{{session_id}}/reset",
+          "raw": "{{base_url}}/api/sessions/{{session_id}}/reset?token={{session_token}}",
           "host": [
             "{{base_url}}"
           ],
@@ -84,6 +84,12 @@
             "sessions",
             "{{session_id}}",
             "reset"
+          ],
+          "query": [
+            {
+              "key": "token",
+              "value": "{{session_token}}"
+            }
           ]
         }
       },
@@ -107,9 +113,9 @@
       "request": {
         "method": "DELETE",
         "header": [],
-        "description": "Deletes an existing session_id. Success means HTTP 200 and success=true.",
+        "description": "Deletes an existing session_id. Requires the session token as a query parameter. Success means HTTP 200 and success=true.",
         "url": {
-          "raw": "{{base_url}}/api/sessions/{{session_id}}",
+          "raw": "{{base_url}}/api/sessions/{{session_id}}?token={{session_token}}",
           "host": [
             "{{base_url}}"
           ],
@@ -117,6 +123,12 @@
             "api",
             "sessions",
             "{{session_id}}"
+          ],
+          "query": [
+            {
+              "key": "token",
+              "value": "{{session_token}}"
+            }
           ]
         }
       },
@@ -140,7 +152,7 @@
       "request": {
         "method": "GET",
         "header": [],
-        "description": "Documentation-only request. To test WebSocket, open Postman WebSocket tab and connect to ws://localhost:8000/ws/chat/{{session_id}}?token={{session_id_token}}. Both variables are auto-populated by the Create Session request. Send JSON: {\"type\":\"user_message\",\"content\":\"Where is my order?\"}. Expect stream events: token, done, or error.",
+        "description": "Documentation-only request. To test WebSocket, open Postman WebSocket tab and connect to ws://localhost:8000/ws/chat/{{session_id}}?token={{session_token}}. Both variables are auto-populated by the Create Session request. Send JSON: {\"type\":\"user_message\",\"content\":\"Where is my order?\"}. Expect stream events: token, done, or error.",
         "url": {
           "raw": "{{base_url}}/health",
           "host": [

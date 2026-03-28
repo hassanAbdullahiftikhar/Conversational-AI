@@ -8,6 +8,17 @@ from typing import AsyncIterator
 import httpx
 
 
+_generate_timeout = httpx.Timeout(connect=10.0, write=30.0, read=None, pool=30.0)
+_generate_client: httpx.AsyncClient | None = None
+
+
+def _get_generate_client() -> httpx.AsyncClient:
+    global _generate_client
+    if _generate_client is None or _generate_client.is_closed:
+        _generate_client = httpx.AsyncClient(timeout=_generate_timeout)
+    return _generate_client
+
+
 class OllamaTimeoutError(Exception):
     pass
 
@@ -60,22 +71,20 @@ class OllamaClient:
         payload = self._build_payload(prompt=prompt, model=model)
 
         try:
-            # Streaming reads can legitimately exceed 30s on CPU; keep read timeout open.
-            timeout = httpx.Timeout(connect=10.0, write=30.0, read=None, pool=30.0)
-            async with httpx.AsyncClient(timeout=timeout) as client:
-                async with client.stream("POST", url, json=payload) as response:
-                    response.raise_for_status()
-                    has_data = False
-                    async for line in response.aiter_lines():
-                        if not line:
-                            continue
-                        has_data = True
-                        data = json.loads(line)
-                        token = str(data.get("response", ""))
-                        if token:
-                            yield token
-                    if not has_data:
-                        raise OllamaTimeoutError("No response from model within timeout.")
+            client = _get_generate_client()
+            async with client.stream("POST", url, json=payload) as response:
+                response.raise_for_status()
+                has_data = False
+                async for line in response.aiter_lines():
+                    if not line:
+                        continue
+                    has_data = True
+                    data = json.loads(line)
+                    token = str(data.get("response", ""))
+                    if token:
+                        yield token
+                if not has_data:
+                    raise OllamaTimeoutError("No response from model within timeout.")
         except httpx.TimeoutException as exc:
             raise OllamaTimeoutError("Model request timed out.") from exc
         except httpx.ConnectError as exc:

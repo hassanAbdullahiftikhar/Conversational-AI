@@ -1,6 +1,8 @@
 services:
   ollama:
     image: ollama/ollama
+    ports:
+      - "11434:11434"
     environment:
       OLLAMA_KEEP_ALIVE: 30m
     volumes:
@@ -8,11 +10,23 @@ services:
 
   conv-manager:
     build: ./conv-manager
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   api-gateway:
     build: ./api-gateway
     ports:
       - "8000:8000"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     environment:
       CONV_MANAGER_URL: http://conv-manager:8001
       OLLAMA_URL: http://ollama:11434
@@ -27,9 +41,14 @@ services:
       OLLAMA_THINK: "false"
       OLLAMA_KEEP_ALIVE: 30m
       OLLAMA_WARMUP_ON_STARTUP: "true"
+      # Voice extension
+      ASR_SERVICE_WS_URL: ws://asr-service:8002/ws/transcribe
+      TTS_SERVICE_URL: http://tts-service:8003
     depends_on:
       - ollama
       - conv-manager
+      - asr-service
+      - tts-service
 
   frontend:
     build: ./frontend
@@ -38,5 +57,44 @@ services:
     depends_on:
       - api-gateway
 
+  # ── Voice Extension Services ─────────────────────────────────
+  asr-service:
+    build: ./asr-service
+    ports:
+      - "8002:8002"
+    environment:
+      MOONSHINE_LANGUAGE: en
+    volumes:
+      - moonshine_cache:/app/cache
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+
+  tts-service:
+    build: ./tts-service
+    ports:
+      - "8003:8003"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+
 volumes:
   ollama_data:
+  moonshine_cache:
+
+# Fix for Docker Desktop on Windows: default MTU 1500 causes large packet
+# fragmentation/drops when downloading apt package indexes from Debian mirrors.
+# Setting MTU to 1450 resolves "Connection timed out" errors during docker build.
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: "1450"

@@ -118,7 +118,7 @@ async def test4_reset_resilience(client: httpx.AsyncClient) -> dict:
         await send_ws_message(session_id, tok, "Can I return it after 10 days?"),
         await send_ws_message(session_id, tok, "What about shipping delays?"),
     ]
-    await client.post(f"{API_BASE}/api/sessions/{session_id}/reset")
+    await client.post(f"{API_BASE}/api/sessions/{session_id}/reset?token={tok}")
     after_1 = await send_ws_message(session_id, tok, "What is your return policy?")
     after_2 = await send_ws_message(session_id, tok, "How long does shipping take?")
 

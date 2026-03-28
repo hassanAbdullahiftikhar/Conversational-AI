@@ -73,7 +73,7 @@ class HistoryManager:
                 except Exception:
                     summary = prev_summary
 
-            self.store.replace_turns(session_id, self._flatten_rounds(recent_rounds_list))
+            self.store.compact_turns(session_id, len(turns), self._flatten_rounds(recent_rounds_list))
             self.store.set_memory_summary(session_id, summary, source_hash)
 
     def _turns_to_rounds(self, turns: list[dict]) -> list[list[dict]]:
@@ -119,3 +119,4 @@ class HistoryManager:
 
     def clear_history(self, session_id: str) -> None:
         self.store.clear_turns(session_id)
+        self._compact_locks.pop(session_id, None)

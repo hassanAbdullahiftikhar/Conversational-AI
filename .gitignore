@@ -16,6 +16,7 @@ frontend/dist/
 .DS_Store
 Thumbs.db
 .vscode/
+.serena/
 
 # Runtime outputs
 benchmark_results.json

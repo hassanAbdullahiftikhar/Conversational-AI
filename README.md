@@ -1,5 +1,5 @@
 # 1. Project Overview
-This project is a local e-commerce customer support chatbot designed for assignment-scale deployment. It uses two FastAPI microservices, a React frontend, and a local Ollama model runtime. The system is policy-driven and intentionally excludes RAG, tool-calling, and external API lookups.
+This project is a local e-commerce customer support chatbot designed for assignment-scale deployment. It uses FastAPI microservices, a React frontend, a local Ollama model runtime, and local voice services for streaming ASR and TTS. The system is policy-driven and intentionally excludes RAG, tool-calling, and external API lookups.
 
 # 2. Architecture
 ```text
@@ -8,14 +8,18 @@ This project is a local e-commerce customer support chatbot designed for assignm
       | WebSocket /ws/chat/{session_id}, REST /api/*
       v
 [API Gateway :8000]
+      |\
+      | \ REST /internal/*
+      |  \
+      |   -> [Conversation Manager :8001]
       |
-      | REST /internal/*
-      v
-[Conversation Manager :8001]
+      |-> WebSocket /ws/transcribe
+      |    -> [ASR Service :8002]
       |
-      | REST /api/generate
-      v
-[Ollama :11434]
+      |-> REST /synthesize
+      |    -> [TTS Service :8003]
+      |
+      -> [Ollama :11434]
 ```
 
 | Service | Port | Responsibility |
@@ -23,12 +27,14 @@ This project is a local e-commerce customer support chatbot designed for assignm
 | frontend | 3000 | Browser UI, session controls, live token rendering |
 | api-gateway | 8000 | Public REST and WebSocket entrypoint, orchestration of conv-manager + Ollama |
 | conv-manager | 8001 | Session/history management, policy checks, prompt construction |
+| asr-service | 8002 | Streaming Moonshine ASR over WebSocket for PCM microphone input |
+| tts-service | 8003 | Kokoro ONNX speech synthesis returning WAV audio |
 | ollama | 11434 | Local model inference runtime (`qwen3.5:2b-q4_K_M`) |
 
 # 3. Prerequisites
 - Docker Desktop for Windows
 - Bash shell (Git Bash or WSL)
-- Free ports: `3000`, `8000`, `8001`
+- Free ports: `3000`, `8000`, `8002`, `8003`, `11434`
 
 # 4. Quick Start
 1. Clone the repository.
@@ -43,9 +49,10 @@ startup.bat
 ```bash
 bash startup.sh
 ```
-Both scripts detect GPU/CPU automatically, bring up all services, wait for Ollama to initialize, and pull the model inside the container.
+Both scripts detect GPU/CPU automatically, bring up all services, wait for ASR, TTS, and Ollama to initialize, and ensure the configured Ollama model is available.
 
 3. Open `http://localhost:3000`.
+4. Allow microphone access in the browser if you want to test the voice path.
 
 # 5. Manual Setup (running without Docker)
 ```bash
@@ -67,6 +74,24 @@ uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
 ```bash
+# Terminal 3 - asr-service
+cd asr-service
+python -m venv .venv
+source .venv/Scripts/activate
+pip install -r requirements.txt
+uvicorn main:app --host 0.0.0.0 --port 8002
+```
+
+```bash
+# Terminal 4 - tts-service
+cd tts-service
+python -m venv .venv
+source .venv/Scripts/activate
+pip install -r requirements.txt
+uvicorn main:app --host 0.0.0.0 --port 8003
+```
+
+```bash
 # Terminal 3 - frontend
 cd frontend
 npm install
@@ -74,7 +99,7 @@ npm run dev
 ```
 
 ```bash
-# Terminal 4 - ollama runtime
+# Terminal 5 - ollama runtime
 ollama pull qwen3.5:2b-q4_K_M
 ollama run qwen3.5:2b-q4_K_M
 ```
@@ -109,9 +134,9 @@ For raw Ollama model latency (no gateway overhead) run `python benchmark.py`. Re
 
 # 9. API Reference
 Public REST (gateway):
-- `POST /api/sessions` -> `{ "session_id": "uuid" }`
-- `DELETE /api/sessions/{session_id}` -> `{ "success": true }`
-- `POST /api/sessions/{session_id}/reset` -> `{ "success": true }`
+- `POST /api/sessions` -> `{ "session_id": "uuid", "token": "hmac" }`
+- `DELETE /api/sessions/{session_id}?token=...` -> `{ "success": true }`
+- `POST /api/sessions/{session_id}/reset?token=...` -> `{ "success": true }`
 - `GET /health` -> `{ "status": "ok" }`
 
 WebSocket:
@@ -120,9 +145,31 @@ WebSocket:
 ```json
 { "type": "user_message", "content": "Where is my order?" }
 ```
+- Voice control messages:
+```json
+{ "type": "audio_start" }
+```
+```json
+{ "type": "audio_end" }
+```
+- Voice selection:
+```json
+{ "type": "set_voice", "voice": "af_bella" }
+```
 - Server -> client token stream:
 ```json
 { "type": "token", "content": "partial text" }
+```
+- Server -> client ASR updates:
+```json
+{ "type": "asr_partial", "content": "partial transcript" }
+```
+```json
+{ "type": "asr_final", "content": "final transcript" }
+```
+- Server -> client voice selection ack:
+```json
+{ "type": "voice_set", "voice": "af_bella" }
 ```
 - Server completion:
 ```json
@@ -143,16 +190,22 @@ Internal REST (conv-manager):
 Ollama boundary:
 - `POST /api/generate` with JSON prompt payload and stream mode.
 
-# 10. Postman Collection
+# 10. Voice Features
+- Voice input uses browser microphone capture, converts audio to 16kHz Int16 PCM, and streams it over the main chat WebSocket.
+- Voice output uses Kokoro ONNX WAV synthesis streamed back as binary WebSocket frames.
+- Supported built-in TTS voices include `af_bella`, `af_sarah`, `af_nicole`, and `am_michael`.
+- For automated smoke coverage, run `python voice_integration_test.py` against a live stack.
+
+# 11. Postman Collection
 `postman_collection.json` is provided in the repository root. Import it in Postman using `Import -> File`, then run requests in order starting from `Create Session` to auto-populate `{{session_id}}`.
 
-# 11. Known Limitations
+# 12. Known Limitations
 - Session state is in-memory only and is lost on service restart.
 - CPU-only inference can take roughly 5-20 seconds depending on host hardware and load.
-- WebSocket sessions are authenticated via HMAC-SHA256 tokens. Tokens are single-use per session and are generated at `POST /api/sessions`; connections without a valid token are rejected with code 4401.
+- WebSocket sessions and session mutation routes are authenticated via an HMAC-SHA256 session token returned by `POST /api/sessions`; connections without a valid token are rejected with code 4401.
 - Context window is constrained to the most recent 5 full rounds plus a compressed summary of up to 15 older rounds, with an estimated 1600-token hard budget for the full-context portion.
 
-# 11.1 Performance Tuning Notes
+# 12.1 Performance Tuning Notes
 - In this Docker setup, Ollama is typically CPU-only unless GPU passthrough is explicitly configured.
 - `/api/generate` is bounded in the gateway. It is no longer unbounded because `num_predict` is explicitly sent on every request.
 - Default inference controls (these match the values set in `docker-compose.yml`):
@@ -168,7 +221,7 @@ Ollama boundary:
 - Ollama is exposed on `localhost:11434` for local diagnostics and benchmark scripts.
 - If responses still feel slow, reduce `OLLAMA_NUM_PREDICT` to `120-160` and restart compose.
 
-# 11.2 Optional GPU Mode
+# 12.2 Optional GPU Mode
 - GPU mode is possible when Docker Desktop and drivers support device passthrough.
 - Use:
 ```bash
@@ -176,7 +229,7 @@ docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d --build
 ```
 - Verify in Ollama logs that compute is not CPU-only and layers are offloaded.
 
-# 12. Project Structure
+# 13. Project Structure
 ```text
 repo-root/
 |- conv-manager/
@@ -195,6 +248,10 @@ repo-root/
 |  |- llm_client.py
 |  |- session_router.py
 |  |- websocket_handler.py
+|- asr-service/
+|  |- Dockerfile
+|  |- requirements.txt
+|  |- main.py
 |- frontend/
 |  |- Dockerfile
 |  |- nginx.conf
@@ -203,6 +260,8 @@ repo-root/
 |     |- App.jsx
 |     |- App.css
 |     |- hooks/useWebSocket.js
+|     |- hooks/useAudioRecorder.js
+|     |- hooks/useAudioPlayer.js
 |     |- components/
 |        |- WelcomeScreen.jsx
 |        |- WelcomeScreen.css
@@ -210,14 +269,21 @@ repo-root/
 |        |- MessageBubble.css
 |        |- ChatWindow.jsx
 |        |- ChatWindow.css
+|        |- MicButton.jsx
 |        |- SessionControls.jsx
 |        |- SessionControls.css
+|        |- VoiceSelector.jsx
+|- tts-service/
+|  |- Dockerfile
+|  |- requirements.txt
+|  |- main.py
 |- docker-compose.yml
 |- docker-compose.gpu.yml
 |- startup.sh
 |- startup.bat
 |- benchmark.py
 |- stress_test.py
+|- voice_integration_test.py
 |- postman_collection.json
 |- README.md
 ```

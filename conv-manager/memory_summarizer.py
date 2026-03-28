@@ -35,7 +35,6 @@ class MemorySummarizer:
             "model": self.model,
             "prompt": prompt,
             "stream": False,
-            "think": False,
             "options": {
                 "num_predict": self.num_predict,
                 "num_ctx": self.num_ctx,

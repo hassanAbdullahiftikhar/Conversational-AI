@@ -1,0 +1,148 @@
+:root {
+  --ds-font-display: "Aptos Display", "Aptos", "Segoe UI", sans-serif;
+  --ds-font-body: "Aptos", "Bahnschrift", "Segoe UI", sans-serif;
+  --ds-radius-xs: 12px;
+  --ds-radius-sm: 18px;
+  --ds-radius-md: 24px;
+  --ds-radius-lg: 30px;
+  --ds-shadow-soft: 0 12px 30px rgba(11, 61, 74, 0.08);
+  --ds-shadow-medium: 0 18px 40px rgba(11, 61, 74, 0.1);
+  --ds-border-soft: rgba(208, 223, 227, 0.92);
+  --ds-surface-glass: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(248, 251, 252, 0.74));
+  --ds-surface-card: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 250, 251, 0.96));
+  --ds-surface-accent: linear-gradient(180deg, rgba(237, 249, 250, 0.98), rgba(225, 243, 245, 0.96));
+  --ds-duration-fast: 160ms;
+  --ds-duration-base: 260ms;
+  --ds-duration-slow: 420ms;
+  --ds-ease-standard: cubic-bezier(0.2, 0.75, 0.2, 1);
+}
+
+body {
+  font-family: var(--ds-font-body);
+}
+
+.ds-surface-glass {
+  background: var(--ds-surface-glass);
+  border: 1px solid var(--ds-border-soft);
+  box-shadow: var(--ds-shadow-medium);
+  backdrop-filter: blur(12px);
+}
+
+.ds-surface-card {
+  background: var(--ds-surface-card);
+  border: 1px solid var(--ds-border-soft);
+  box-shadow: var(--ds-shadow-soft);
+}
+
+.ds-surface-accent {
+  background: var(--ds-surface-accent);
+  border: 1px solid rgba(188, 224, 228, 0.92);
+  box-shadow: var(--ds-shadow-soft);
+}
+
+.ds-kicker {
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #6c838b;
+}
+
+.ds-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--ds-border-soft);
+  color: #55717b;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.ds-action-button {
+  border: 1px solid var(--ds-border-soft);
+  background: rgba(255, 255, 255, 0.9);
+  color: #566068;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background var(--ds-duration-fast) var(--ds-ease-standard),
+    color var(--ds-duration-fast) var(--ds-ease-standard),
+    border-color var(--ds-duration-fast) var(--ds-ease-standard),
+    transform var(--ds-duration-fast) var(--ds-ease-standard);
+}
+
+.ds-action-button:hover:not(:disabled) {
+  background: #eef5f6;
+  color: #0f6f79;
+  border-color: rgba(177, 207, 214, 0.98);
+  transform: translateY(-1px);
+}
+
+.ds-focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(15, 111, 121, 0.12);
+}
+
+.ds-view-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.ds-view-shell {
+  width: 100%;
+  height: 100%;
+  transition:
+    opacity var(--ds-duration-base) var(--ds-ease-standard),
+    transform var(--ds-duration-base) var(--ds-ease-standard),
+    filter var(--ds-duration-base) var(--ds-ease-standard);
+  will-change: opacity, transform, filter;
+}
+
+.ds-view-shell.phase-enter {
+  animation: ds-view-enter var(--ds-duration-slow) var(--ds-ease-standard);
+}
+
+.ds-view-shell.phase-exit {
+  animation: ds-view-exit var(--ds-duration-fast) var(--ds-ease-standard) forwards;
+}
+
+@keyframes ds-view-enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.988);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes ds-view-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.992);
+    filter: blur(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-view-shell,
+  .ds-action-button {
+    transition: none;
+    animation: none !important;
+  }
+}

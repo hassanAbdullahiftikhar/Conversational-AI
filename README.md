@@ -1,3 +1,5 @@
+# Nexa: NexaKart's Support Assistant
+
 # 1. Project Overview
 This project is a local e-commerce customer support chatbot designed for assignment-scale deployment. It uses FastAPI microservices, a React frontend, a local Ollama model runtime, and local voice services for streaming ASR and TTS. The system is policy-driven and intentionally excludes RAG, tool-calling, and external API lookups.
 

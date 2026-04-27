@@ -222,8 +222,8 @@ class PromptBuilder:
             "2. `web_search` - Search internet (ONLY if search_docs fails or for real-time info like prices/news). DO NOT use for general explanations - answer directly instead.\n"
             "3. `get_device_status` - Check live device state in user's home (use when user asks about specific device)\n"
             "4. `check_device_compatibility` - Check if device works with protocol/ecosystem\n"
-            "5. `crm_profile_read` - Read user's saved profile (use when user asks about their profile)\n"
-            "6. `crm_profile_write` - Save/update user's profile (use when user provides profile info)\n"
+            "5. `crm_profile_read` - Read user's saved profile (use when user asks about their profile). Arguments: name, city, location, contact_email, preferred_protocols, preferred_platform, notes\n"
+            "6. `crm_profile_write` - Save/update user's profile (use when user provides profile info). Arguments: name, city, location, contact_email, preferred_protocols, preferred_platform, notes\n"
             "7. `calculator` - Evaluate complex math expressions (use only for precision-critical calculations, not simple arithmetic)\n"
             "8. `url_fetch` - Fetch content from specific URL (use when user provides a URL)\n"
         )

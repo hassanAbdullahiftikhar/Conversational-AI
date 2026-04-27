@@ -4,20 +4,17 @@ rem NexaKart startup script for Windows
 set MAX_RETRIES=60
 set LLM_MAX_RETRIES=180
 set POLL_INTERVAL=10
-set DO_BUILD=
-
-rem ── Optional flag: rebuild images ────────────────────────────
-rem Usage:
-rem   startup.bat          -> fast start (no image rebuild)
-rem   startup.bat --build  -> rebuild images (when Dockerfiles/requirements change)
-rem   startup.bat --rebuild-corpus -> clone repos and rebuild RAG corpus
+set REBUILD_IMAGES=
 set REBUILD_CORPUS=
 if /I "%~1"=="--rebuild-corpus" (
-    set DO_BUILD=--build
+    set REBUILD_IMAGES=--build
     set REBUILD_CORPUS=1
 )
 if /I "%~1"=="--build" (
-    set DO_BUILD=--build
+    set REBUILD_IMAGES=--build
+)
+if /I "%~1"=="--build" (
+    set REBUILD_IMAGES=--build
 )
 
 rem ── Preflight: ensure Docker daemon is reachable ───────────
@@ -32,53 +29,17 @@ if errorlevel 1 (
     goto end
 )
 
-rem ── Optional: Rebuild RAG corpus ─────────────────────────────
-if defined REBUILD_CORPUS (
-    echo.
-    echo ==== Building RAG Corpus ======
-    if not exist "conv-manager\smart_home_rag\repos" mkdir "conv-manager\smart_home_rag\repos"
-    
-    echo Cloning repos (this may take several minutes)...
-    if not exist "conv-manager\smart_home_rag\repos\home-assistant.io" (
-        git clone https://github.com/home-assistant/home-assistant.io.git conv-manager\smart_home_rag\repos\home-assistant.io
-    ) else (
-        echo   home-assistant.io already exists, skipping.
-    )
-    
-    if not exist "conv-manager\smart_home_rag\repos\zigbee2mqtt.io" (
-        git clone https://github.com/Koenkk/zigbee2mqtt.io.git conv-manager\smart_home_rag\repos\zigbee2mqtt.io
-    ) else (
-        echo   zigbee2mqtt.io already exists, skipping.
-    )
-    
-    if not exist "conv-manager\smart_home_rag\repos\esphome-docs" (
-        git clone https://github.com/esphome/esphome-docs.git conv-manager\smart_home_rag\repos\esphome-docs
-    ) else (
-        echo   esphome-docs already exists, skipping.
-    )
-    
-    echo Building corpus chunks...
-    python conv-manager\smart_home_rag\corpus_builder.py
-    if errorlevel 1 (
-        echo WARNING: corpus_builder.py failed. RAG may have limited data.
-    ) else (
-        echo Corpus built successfully.
-    )
-    echo ================================
-    echo.
-)
-
 rem ── Detect GPU ─────────────────────────────────────────────
 where nvidia-smi >nul 2>nul
 if %errorlevel%==0 (
     echo GPU detected. Starting with GPU compose override...
     rem Bring down any stale containers first to avoid Docker network/DNS issues
     docker compose -f docker-compose.yml -f docker-compose.gpu.yml down
-    docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d %DO_BUILD%
+    docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d %REBUILD_IMAGES%
 ) else (
     echo No GPU runtime detected. Starting standard compose stack...
     docker compose down
-    docker compose up -d %DO_BUILD%
+    docker compose up -d %REBUILD_IMAGES%
 )
 
 @if errorlevel 1 (
@@ -138,7 +99,7 @@ if %errorlevel%==0 (
     goto poll_gateway
 )
 set DL_MB=0
-for /f %%p in ('docker exec conversational-ai-llm-engine-1 sh -lc "du -sm /root/.cache/huggingface/hub/models--unsloth--gemma-4-E4B-it-GGUF/blobs/*.downloadInProgress 2>/dev/null | awk '{sum+=$1} END {print sum+0}'" 2^>nul') do set DL_MB=%%p
+for /f %%p in ('docker compose exec -T llm-engine sh -lc "du -sm /root/.cache/huggingface/hub/models--unsloth--gemma-4-E4B-it-GGUF/blobs/*.downloadInProgress 2>/dev/null | awk '{sum+=$1} END {print sum+0}'" 2^>nul') do set DL_MB=%%p
 set /a DL_PCT=(DL_MB*100)/5000
 if %DL_PCT% gtr 99 set DL_PCT=99
 echo   Waiting for llm-engine... (%counter%/%LLM_MAX_RETRIES%)  download~%DL_MB%MB (%DL_PCT%%)
@@ -157,11 +118,49 @@ if %counter% gtr %MAX_RETRIES% (
 curl -sf http://localhost:8000/health >nul 2>nul
 if %errorlevel%==0 (
     echo api-gateway is healthy.
-    goto ready_banner
+    goto corpus_rebuild_check
 )
 echo   Waiting for api-gateway... (%counter%/%MAX_RETRIES%)
 timeout /t %POLL_INTERVAL% /nobreak >nul
 goto poll_gateway
+
+rem ── Optional: Rebuild RAG corpus ─────────────────────────────
+:corpus_rebuild_check
+if not defined REBUILD_CORPUS (
+    goto ready_banner
+)
+echo.
+echo ==== Building RAG Corpus ======
+if not exist "conv-manager\smart_home_rag\repos" mkdir "conv-manager\smart_home_rag\repos"
+
+echo Cloning repos (this may take several minutes)...
+if not exist "conv-manager\smart_home_rag\repos\home-assistant.io" (
+    git clone https://github.com/home-assistant/home-assistant.io.git conv-manager\smart_home_rag\repos\home-assistant.io
+) else (
+    echo   home-assistant.io already exists, skipping.
+)
+
+if not exist "conv-manager\smart_home_rag\repos\zigbee2mqtt.io" (
+    git clone https://github.com/Koenkk/zigbee2mqtt.io.git conv-manager\smart_home_rag\repos\zigbee2mqtt.io
+) else (
+    echo   zigbee2mqtt.io already exists, skipping.
+)
+
+if not exist "conv-manager\smart_home_rag\repos\esphome-docs" (
+    git clone https://github.com/esphome/esphome-docs.git conv-manager\smart_home_rag\repos\esphome-docs
+) else (
+    echo   esphome-docs already exists, skipping.
+)
+
+echo Building corpus chunks...
+docker compose exec -T conv-manager python smart_home_rag/corpus_builder.py
+if errorlevel 1 (
+    echo WARNING: corpus_builder.py failed. RAG may have limited data.
+) else (
+    echo Corpus built successfully.
+)
+echo ================================
+echo.
 
 :ready_banner
 echo.

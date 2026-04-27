@@ -1,7 +1,7 @@
 """
 voice_integration_test.py — End-to-end smoke tests for the voice pipeline (Phase 4).
 
-Runs 8 tests against a live NexaKart 6-service stack on localhost.
+Runs 8 tests against a live Smart Home 6-service stack on localhost.
 Dependencies: websockets>=12, httpx>=0.27 (both already in project).
 
 Usage: python voice_integration_test.py
@@ -143,7 +143,7 @@ async def test4_tts_synthesis() -> tuple[bool, str]:
         async with httpx.AsyncClient(timeout=60.0) as client:
             resp = await client.post(
                 f"{TTS_URL}/synthesize",
-                json={"text": "Hello, welcome to NexaKart.", "voice": "af_bella"},
+                json={"text": "Hello, welcome to Smart Home support.", "voice": "af_bella"},
             )
             if resp.status_code != 200:
                 return False, f"status={resp.status_code}"
@@ -301,7 +301,7 @@ async def test8_text_path_regression() -> tuple[bool, str]:
             await ws.send(
                 json.dumps({
                     "type": "user_message",
-                    "content": "What is your return policy?",
+                    "content": "How do I pair a Zigbee device?",
                 })
             )
 

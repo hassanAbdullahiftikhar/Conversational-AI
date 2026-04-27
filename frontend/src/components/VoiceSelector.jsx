@@ -45,7 +45,7 @@ export default function VoiceSelector({
             <button
               key={v.id}
               type="button"
-              className={`voice-chip ${isActive ? "active" : ""}`}
+              className={`voice-chip ds-focus-ring ${isActive ? "active" : ""}`}
               onClick={() => onVoiceChange(v.id)}
               disabled={disabled}
               aria-pressed={isActive}
@@ -63,7 +63,7 @@ export default function VoiceSelector({
           value={String(currentSpeed)}
           onChange={(event) => onSpeedChange(Number(event.target.value))}
           disabled={disabled}
-          className="voice-speed-select"
+          className="voice-speed-select ds-focus-ring"
           aria-label="Voice speed"
           title="Voice speed"
         >
@@ -79,7 +79,7 @@ export default function VoiceSelector({
         <span className="voice-panel-label">Speech</span>
         <button
           type="button"
-          className={`voice-toggle ${speechEnabled ? "active" : ""}`}
+          className={`voice-toggle ds-focus-ring ${speechEnabled ? "active" : ""}`}
           onClick={onSpeechToggle}
           disabled={disabled}
           aria-pressed={speechEnabled}

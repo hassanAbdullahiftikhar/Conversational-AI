@@ -147,6 +147,48 @@
   animation-delay: 0.3s;
 }
 
+.message-diagnostics {
+  margin: -2px 0 10px;
+  padding-left: 54px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.message-diagnostics-timings {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.message-diagnostics-timings span {
+  font-size: 0.72rem;
+  color: #466873;
+  background: rgba(228, 243, 245, 0.9);
+  border: 1px solid rgba(197, 226, 230, 0.95);
+  border-radius: 999px;
+  padding: 3px 8px;
+}
+
+.message-diagnostics-sources {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.source-chip {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.72rem;
+  color: #2e5664;
+  background: rgba(242, 249, 250, 0.95);
+  border: 1px solid rgba(205, 224, 229, 0.95);
+  border-radius: 10px;
+  padding: 4px 8px;
+}
+
 @keyframes bounce {
   0%, 80%, 100% { transform: translateY(0); opacity: 0.55; }
   40% { transform: translateY(-4px); opacity: 1; }
@@ -168,5 +210,9 @@
 
   .chat-stream-note {
     font-size: 0.76rem;
+  }
+
+  .message-diagnostics {
+    padding-left: 6px;
   }
 }

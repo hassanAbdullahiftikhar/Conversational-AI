@@ -28,6 +28,8 @@ async def send_ws_message(session_id: str, token: str, content: str) -> dict:
     token_count = 0
     error = None
     full = ""
+    timings = {}
+    source_count = 0
 
     try:
         async with websockets.connect(f"{WS_BASE}/{session_id}?token={token}") as ws:
@@ -41,6 +43,11 @@ async def send_ws_message(session_id: str, token: str, content: str) -> dict:
                     if ttft is None:
                         ttft = time.perf_counter() - start
                 elif data.get("type") == "done":
+                    raw_timings = data.get("timings", {})
+                    timings = raw_timings if isinstance(raw_timings, dict) else {}
+                    raw_sources = data.get("sources", [])
+                    if isinstance(raw_sources, list):
+                        source_count = sum(1 for item in raw_sources if isinstance(item, dict))
                     done = True
                     break
                 elif data.get("type") == "error":
@@ -56,6 +63,8 @@ async def send_ws_message(session_id: str, token: str, content: str) -> dict:
         "error": error,
         "token_count": token_count,
         "response_signature": sanitize_text(full)[:80],
+        "timings": timings,
+        "source_count": source_count,
     }
 
 
@@ -63,11 +72,24 @@ async def test1_baseline(client: httpx.AsyncClient) -> dict:
     rows = []
     for _ in range(5):
         session_id, tok = await create_session(client)
-        result = await send_ws_message(session_id, tok, "Where is my order?")
+        result = await send_ws_message(session_id, tok, "How do I configure zigbee2mqtt?")
         rows.append(result)
 
     ttfts = [r["ttft"] for r in rows if r["ttft"] is not None]
     totals = [r["total"] for r in rows]
+
+    def avg_timing(field: str) -> float | None:
+        values = []
+        for row in rows:
+            raw = row.get("timings", {}).get(field)
+            if isinstance(raw, (int, float)):
+                values.append(float(raw))
+        if not values:
+            return None
+        return round(statistics.mean(values), 2)
+
+    source_counts = [int(row.get("source_count", 0)) for row in rows]
+
     return {
         "label": "TEST 1 - Baseline latency",
         "min_ttft": min(ttfts) if ttfts else None,
@@ -76,6 +98,12 @@ async def test1_baseline(client: httpx.AsyncClient) -> dict:
         "min_total": min(totals),
         "max_total": max(totals),
         "avg_total": round(statistics.mean(totals), 4),
+        "avg_prompt_build_ms": avg_timing("prompt_build_ms"),
+        "avg_model_prefill_ms": avg_timing("model_prefill_ms"),
+        "avg_model_eval_ms": avg_timing("model_eval_ms"),
+        "avg_tts_synthesis_ms": avg_timing("tts_synthesis_ms"),
+        "avg_pipeline_wall_ms": avg_timing("pipeline_wall_ms"),
+        "avg_source_count": round(statistics.mean(source_counts), 2) if source_counts else 0.0,
     }
 
 
@@ -83,7 +111,7 @@ async def test2_concurrent(client: httpx.AsyncClient) -> dict:
     sessions = [await create_session(client) for _ in range(10)]
     started = time.perf_counter()
     results = await asyncio.gather(
-        *[send_ws_message(sid, tok, "I need a shipping estimate") for sid, tok in sessions]
+        *[send_ws_message(sid, tok, "How do I connect my ESPHome device?") for sid, tok in sessions]
     )
     total_time = time.perf_counter() - started
     success = sum(1 for r in results if r["done"] and not r["error"])
@@ -99,7 +127,7 @@ async def test2_concurrent(client: httpx.AsyncClient) -> dict:
 async def test3_over_capacity(client: httpx.AsyncClient) -> dict:
     sessions = [await create_session(client) for _ in range(12)]
     results = await asyncio.gather(
-        *[send_ws_message(sid, tok, "Can you help with returns?") for sid, tok in sessions]
+        *[send_ws_message(sid, tok, "What is the range of Z-Wave?") for sid, tok in sessions]
     )
     rejected = sum(1 for r in results if r["error"] == "server_at_capacity")
     accepted = len(results) - rejected
@@ -114,13 +142,13 @@ async def test3_over_capacity(client: httpx.AsyncClient) -> dict:
 async def test4_reset_resilience(client: httpx.AsyncClient) -> dict:
     session_id, tok = await create_session(client)
     first = [
-        await send_ws_message(session_id, tok, "My order number is 12345, where is it?"),
-        await send_ws_message(session_id, tok, "Can I return it after 10 days?"),
-        await send_ws_message(session_id, tok, "What about shipping delays?"),
+        await send_ws_message(session_id, tok, "My garage plug is offline, what should I do?"),
+        await send_ws_message(session_id, tok, "Is it compatible with Home Assistant?"),
+        await send_ws_message(session_id, tok, "How do I check the protocol?"),
     ]
     await client.post(f"{API_BASE}/api/sessions/{session_id}/reset?token={tok}")
-    after_1 = await send_ws_message(session_id, tok, "What is your return policy?")
-    after_2 = await send_ws_message(session_id, tok, "How long does shipping take?")
+    after_1 = await send_ws_message(session_id, tok, "How do I pair a Zigbee device?")
+    after_2 = await send_ws_message(session_id, tok, "What is ESPHome?")
 
     pre_signatures = {x["response_signature"] for x in first if x["response_signature"]}
     post_signatures = {after_1["response_signature"], after_2["response_signature"]}

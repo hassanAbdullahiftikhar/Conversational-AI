@@ -22,6 +22,7 @@ DEFAULT_LANGUAGE = "en-us"
 
 _kokoro: Kokoro | None = None
 _available_voices: set[str] = set()
+_kokoro_semaphore = asyncio.Semaphore(2)
 
 
 class SynthesizeRequest(BaseModel):
@@ -63,7 +64,7 @@ def voices() -> dict[str, list[str]]:
 
 
 @app.post("/synthesize")
-def synthesize(request: SynthesizeRequest):
+async def synthesize(request: SynthesizeRequest):
     if _kokoro is None:
         return JSONResponse(status_code=503, content={"error": "model_not_loaded"})
 
@@ -75,7 +76,7 @@ def synthesize(request: SynthesizeRequest):
             status_code=422,
             content={"error": "invalid_voice", "allowed": sorted(_available_voices)},
         )
-    if request.speed < 0.5 or request.speed > 2.0:
+    if request.speed < 0.25 or request.speed > 3.0:
         return JSONResponse(status_code=422, content={"error": "invalid_speed"})
 
     try:
@@ -84,12 +85,14 @@ def synthesize(request: SynthesizeRequest):
             request.voice,
             len(text),
         )
-        samples, sample_rate = _kokoro.create(
-            text,
-            voice=request.voice,
-            speed=request.speed,
-            lang=DEFAULT_LANGUAGE,
-        )
+        async with _kokoro_semaphore:
+            samples, sample_rate = await asyncio.to_thread(
+                _kokoro.create,
+                text,
+                voice=request.voice,
+                speed=request.speed,
+                lang=DEFAULT_LANGUAGE,
+            )
         buffer = io.BytesIO()
         sf.write(buffer, samples, sample_rate, format="WAV")
         return Response(

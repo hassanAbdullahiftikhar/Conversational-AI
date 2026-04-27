@@ -43,12 +43,17 @@ class HistoryManager:
         max_total_rounds: int = 20,
         recent_full_rounds: int = 5,
         summarized_rounds_limit: int = 15,
+        max_total_tokens: int = 1600,
     ) -> None:
         lock = self._get_compact_lock(session_id)
         async with lock:
             turns = self.store.get_turns(session_id)
             if not turns:
                 self.store.set_memory_summary(session_id, "", "")
+                return
+
+            estimated_tokens = sum(len(str(t.get("content", ""))) // 4 for t in turns)
+            if estimated_tokens <= max_total_tokens:
                 return
 
             rounds = self._turns_to_rounds(turns)

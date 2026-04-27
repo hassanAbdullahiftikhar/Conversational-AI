@@ -121,6 +121,14 @@
   box-shadow: none;
 }
 
+.bubble-replay-toggle {
+  box-shadow: none;
+}
+
+.bubble-replay-toggle:hover {
+  box-shadow: none;
+}
+
 @keyframes blink {
   50% { opacity: 0; }
 }
@@ -133,6 +141,13 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bubble-row,
+  .cursor {
+    animation: none !important;
   }
 }
 

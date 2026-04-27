@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from llm_client import OllamaClient
+from llm_client import LlmClient, get_llm_http_client
 from session_router import router as session_router
 from websocket_handler import router as websocket_router
 
@@ -18,17 +18,20 @@ logger = logging.getLogger("api-gateway")
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
-    llm = OllamaClient()
+    llm = LlmClient()
     healthy = await llm.health_check()
     if not healthy:
-        logger.warning("action=ollama_health_check status=unhealthy")
-    elif os.getenv("OLLAMA_WARMUP_ON_STARTUP", "true").lower() in {"1", "true", "yes"}:
-        warmed = await llm.warmup()
-        if warmed:
-            logger.info("action=ollama_warmup status=ready")
-        else:
-            logger.warning("action=ollama_warmup status=failed")
+        logger.warning("action=llm_health_check status=unhealthy")
+    else:
+        logger.info("action=llm_health_check status=ready")
     yield
+    # Teardown
+    try:
+        client = await get_llm_http_client()
+        await client.aclose()
+    except Exception:
+        pass
+    logger.info("action=gateway_shutdown clients_closed")
 
 
 app = FastAPI(title="api-gateway", lifespan=lifespan)

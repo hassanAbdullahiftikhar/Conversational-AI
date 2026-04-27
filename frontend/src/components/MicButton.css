@@ -20,6 +20,13 @@
   border-color: rgba(17, 108, 128, 0.28);
 }
 
+.mic-button.ds-focus-ring:focus-visible {
+  outline: none;
+  box-shadow:
+    0 14px 28px rgba(24, 74, 87, 0.16),
+    0 0 0 4px rgba(15, 111, 121, 0.16);
+}
+
 .mic-button:disabled {
   opacity: 0.45;
   cursor: not-allowed;

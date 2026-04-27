@@ -14,6 +14,7 @@ export function useAudioPlayer() {
   const mutedResponsesRef = useRef(new Set());
   const sourceRef = useRef(null);
   const currentResponseIdRef = useRef(null);
+  const playbackGenerationRef = useRef(0);
 
   const _getOrCreateContext = () => {
     if (!audioCtxRef.current || audioCtxRef.current.state === "closed") {
@@ -36,6 +37,7 @@ export function useAudioPlayer() {
     setIsPlaying(true);
 
     const chunk = queueRef.current.shift();
+    const generationAtSchedule = playbackGenerationRef.current;
     currentResponseIdRef.current = chunk.responseId;
     const ctx = _getOrCreateContext();
 
@@ -48,6 +50,16 @@ export function useAudioPlayer() {
     ctx.decodeAudioData(
       buffer,
       (audioBuffer) => {
+        if (generationAtSchedule !== playbackGenerationRef.current) {
+          return;
+        }
+
+        if (mutedResponsesRef.current.has(chunk.responseId)) {
+          currentResponseIdRef.current = null;
+          _playNext();
+          return;
+        }
+
         const source = ctx.createBufferSource();
         sourceRef.current = source;
         source.buffer = audioBuffer;
@@ -56,12 +68,18 @@ export function useAudioPlayer() {
           if (sourceRef.current === source) {
             sourceRef.current = null;
           }
+          if (generationAtSchedule !== playbackGenerationRef.current) {
+            return;
+          }
           currentResponseIdRef.current = null;
           _playNext();
         };
         source.start();
       },
       (_err) => {
+        if (generationAtSchedule !== playbackGenerationRef.current) {
+          return;
+        }
         // Skip undecodable chunk and move to next
         currentResponseIdRef.current = null;
         _playNext();
@@ -84,6 +102,7 @@ export function useAudioPlayer() {
   );
 
   const stop = useCallback(() => {
+    playbackGenerationRef.current += 1;
     queueRef.current = [];
     playingRef.current = false;
     setIsPlaying(false);

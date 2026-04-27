@@ -21,6 +21,13 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
+.session-control-button.ds-focus-ring:focus-visible {
+  outline: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 0 4px rgba(255, 255, 255, 0.16);
+}
+
 .session-control-button:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.28);
@@ -31,6 +38,12 @@
 
 .session-control-button.ghost {
   background: rgba(7, 49, 57, 0.18);
+}
+
+.session-control-button.active {
+  background: rgba(255, 214, 102, 0.26);
+  border-color: rgba(255, 221, 143, 0.72);
+  color: #fff7df;
 }
 
 .session-control-button:disabled {

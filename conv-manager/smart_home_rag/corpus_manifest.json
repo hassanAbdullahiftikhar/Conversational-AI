@@ -1,0 +1,80 @@
+{
+  "target_total_docs": 70,
+  "max_total_docs": 100,
+  "sources": [
+    {
+      "name": "home_assistant",
+      "repo_root": "repos/home-assistant.io",
+      "license": "CC-BY-4.0",
+      "max_docs": 35,
+      "include": [
+        "source/_docs/**/*.markdown",
+        "source/_integrations/**/*.markdown"
+      ],
+      "exclude": [
+        "**/changelog/**",
+        "**/release-notes/**",
+        "**/blog/**",
+        "**/breaking_changes/**",
+        "**/blueprints/**"
+      ],
+      "priority_contains": [
+        "zigbee",
+        "z-wave",
+        "mqtt",
+        "esphome",
+        "automation",
+        "script",
+        "helper",
+        "troubleshooting"
+      ]
+    },
+    {
+      "name": "zigbee2mqtt",
+      "repo_root": "repos/zigbee2mqtt.io",
+      "license": "CC-BY-4.0",
+      "max_docs": 20,
+      "include": [
+        "docs/**/*.md"
+      ],
+      "exclude": [
+        "**/changelog/**",
+        "**/release/**"
+      ],
+      "priority_contains": [
+        "devices",
+        "supported-devices",
+        "guide",
+        "configuration",
+        "troubleshooting",
+        "adapter"
+      ]
+    },
+    {
+      "name": "esphome",
+      "repo_root": "repos/esphome-docs",
+      "license": "MIT",
+      "max_docs": 15,
+      "include": [
+        "src/content/docs/**/*.mdx",
+        "src/content/docs/**/*.md"
+      ],
+      "exclude": [
+        "src/content/docs/changelog/**",
+        "src/content/docs/cookbook/**",
+        "**/changelog/**",
+        "**/release/**",
+        "**/contributing/**"
+      ],
+      "priority_contains": [
+        "sensor",
+        "switch",
+        "light",
+        "binary_sensor",
+        "api",
+        "wifi",
+        "troubleshooting"
+      ]
+    }
+  ]
+}

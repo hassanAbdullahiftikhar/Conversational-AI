@@ -46,8 +46,8 @@ async def create_session() -> dict:
                 json={"session_id": session_id},
             )
             response.raise_for_status()
-        token = _make_token(session_id)
-        return {"session_id": session_id, "token": token}
+            token = _make_token(session_id)
+            return {"session_id": session_id, "token": token}
     except Exception:
         return _upstream_error()
 

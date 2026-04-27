@@ -48,6 +48,13 @@
   border-color: transparent;
 }
 
+.voice-chip.ds-focus-ring:focus-visible,
+.voice-toggle.ds-focus-ring:focus-visible,
+.voice-speed-select.ds-focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.18);
+}
+
 .voice-chip:hover:not(:disabled),
 .voice-toggle:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.16);

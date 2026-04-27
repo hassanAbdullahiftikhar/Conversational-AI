@@ -105,6 +105,7 @@ body {
 .brand-name {
   font-size: 1.22rem;
   font-weight: 800;
+  font-family: var(--ds-font-display);
   color: #ffffff;
   letter-spacing: -0.04em;
 }
@@ -268,6 +269,22 @@ body {
 .input-meta-copy {
   color: #627983;
   font-size: 0.84rem;
+}
+
+.diagnostics-strip {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.76rem;
+  color: #305766;
+}
+
+.diagnostics-strip span {
+  background: #e4f3f5;
+  border: 1px solid #c5e2e6;
+  border-radius: 999px;
+  padding: 4px 9px;
 }
 
 /* ── Responsive ─────────────────────────── */

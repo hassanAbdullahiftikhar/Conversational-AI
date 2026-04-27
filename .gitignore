@@ -21,3 +21,7 @@ Thumbs.db
 # Runtime outputs
 benchmark_results.json
 stress_test_results.json
+
+# Smart-home RAG generated artifacts
+conv-manager/smart_home_rag/data/
+conv-manager/smart_home_rag/repos/

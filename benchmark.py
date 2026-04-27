@@ -5,11 +5,9 @@ import time
 
 import httpx
 
-URL = os.getenv("OLLAMA_API_URL", "http://localhost:11434/api/generate")
-MODEL = os.getenv("OLLAMA_MODEL", "qwen3.5:2b-q4_K_M")
-NUM_PREDICT = int(os.getenv("OLLAMA_NUM_PREDICT", "192"))
-NUM_CTX = int(os.getenv("OLLAMA_NUM_CTX", "2048"))
-TEMPERATURE = float(os.getenv("OLLAMA_TEMPERATURE", "0.65"))
+URL = os.getenv("LLM_URL", "http://llm-engine:11434/v1/chat/completions")
+MODEL = os.getenv("LLM_MODEL", "gemma-4-E4B-it")
+TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.65"))
 REQUESTS = int(os.getenv("BENCH_REQUESTS", "10"))
 PROMPT = (
     "You are a customer support assistant for an electronics retailer. "
@@ -27,20 +25,17 @@ def main() -> None:
                 URL,
                 json={
                     "model": MODEL,
-                    "prompt": PROMPT,
+                    "messages": [{"role": "user", "content": PROMPT}],
                     "stream": False,
-                    "options": {
-                        "num_predict": NUM_PREDICT,
-                        "num_ctx": NUM_CTX,
-                        "temperature": TEMPERATURE,
-                    },
+                    "temperature": TEMPERATURE,
                 },
             )
             ttfb = time.perf_counter() - start
             response.raise_for_status()
             body = response.json()
             total = time.perf_counter() - start
-            text = str(body.get("response", ""))
+            choices = body.get("choices", [])
+            text = str(choices[0].get("message", {}).get("content", "")) if choices else ""
             est_tokens = len(text) / 4
             tps = est_tokens / total if total > 0 else 0.0
             rows.append(

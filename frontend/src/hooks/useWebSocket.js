@@ -53,7 +53,11 @@ export function useWebSocket({
         if (data.type === "token") {
           callbacksRef.current.onToken(data.content || "", data.response_id || null);
         } else if (data.type === "done") {
-          callbacksRef.current.onDone(data.response_id || null);
+          callbacksRef.current.onDone(
+            data.response_id || null,
+            (typeof data.timings === "object" && data.timings) || {},
+            Array.isArray(data.sources) ? data.sources : []
+          );
         } else if (data.type === "error") {
           callbacksRef.current.onError(data.content || "Unknown error");
         } else if (data.type === "asr_partial") {

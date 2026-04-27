@@ -29,9 +29,11 @@ class StreamingListener(TranscriptEventListener):
         self._queue = queue
         self._completed_line_ids: set[int] = set()
         self._completed_lines: list[str] = []
+        self._archived_parts: list[str] = []
         self._active_line_id: int | None = None
         self._active_line_text = ""
         self._last_partial = ""
+        self._flush_threshold = 20
 
     def _emit(self, payload: dict[str, str]) -> None:
         self._loop.call_soon_threadsafe(self._queue.put_nowait, payload)
@@ -40,10 +42,21 @@ class StreamingListener(TranscriptEventListener):
         return getattr(line, "line_id", None)
 
     def _combined_text(self) -> str:
-        parts = [*self._completed_lines]
+        parts: list[str] = []
+        if self._archived_parts:
+            parts.append(" ".join(self._archived_parts))
+        parts.extend(self._completed_lines)
         if self._active_line_text.strip():
             parts.append(self._active_line_text.strip())
         return " ".join(parts).strip()
+
+    def _maybe_flush_completed_lines(self) -> None:
+        if len(self._completed_lines) < self._flush_threshold:
+            return
+        chunk = " ".join(self._completed_lines).strip()
+        if chunk:
+            self._archived_parts.append(chunk)
+        self._completed_lines = []
 
     def _emit_partial_if_changed(self) -> None:
         combined = self._combined_text()
@@ -70,6 +83,7 @@ class StreamingListener(TranscriptEventListener):
         if line_id == self._active_line_id:
             self._active_line_id = None
             self._active_line_text = ""
+        self._maybe_flush_completed_lines()
         self._emit_partial_if_changed()
 
     def on_error(self, event) -> None:
@@ -151,7 +165,7 @@ async def transcribe_stream(websocket: WebSocket) -> None:
                 if audio.size == 0:
                     continue
                 audio /= 32768.0
-                transcriber.add_audio(audio.tolist(), sample_rate=TARGET_SAMPLE_RATE)
+                transcriber.add_audio(audio, sample_rate=TARGET_SAMPLE_RATE)
                 continue
 
             raw_text = message.get("text")
@@ -183,6 +197,10 @@ async def transcribe_stream(websocket: WebSocket) -> None:
         except Exception:
             pass
     finally:
+        try:
+            await loop.run_in_executor(None, transcriber.stop)
+        except Exception:
+            logger.exception("action=transcriber_stop_failed")
         try:
             await loop.run_in_executor(None, transcriber.close)
         except Exception:

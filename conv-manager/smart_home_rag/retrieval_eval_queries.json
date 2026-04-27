@@ -1,0 +1,52 @@
+[
+  {
+    "id": "q01",
+    "query": "how to pair a zigbee device in home assistant",
+    "expected_contains": ["zigbee", "home-assistant"]
+  },
+  {
+    "id": "q02",
+    "query": "zigbee2mqtt adapter troubleshooting steps",
+    "expected_contains": ["zigbee2mqtt", "adapter", "troubleshooting"]
+  },
+  {
+    "id": "q03",
+    "query": "esphome wifi configuration and api setup",
+    "expected_contains": ["esphome", "wifi", "api"]
+  },
+  {
+    "id": "q04",
+    "query": "difference between z-wave and zigbee integrations",
+    "expected_contains": ["z-wave", "zigbee"]
+  },
+  {
+    "id": "q05",
+    "query": "home assistant automation trigger and condition examples",
+    "expected_contains": ["automation", "home-assistant"]
+  },
+  {
+    "id": "q06",
+    "query": "mqtt discovery setup in home assistant",
+    "expected_contains": ["mqtt", "home-assistant"]
+  },
+  {
+    "id": "q07",
+    "query": "esphome binary sensor configuration",
+    "expected_contains": ["esphome", "binary_sensor"]
+  },
+  {
+    "id": "q08",
+    "query": "zigbee2mqtt supported devices list",
+    "expected_contains": ["zigbee2mqtt", "devices"]
+  },
+  {
+    "id": "q09",
+    "query": "home assistant helper entities overview",
+    "expected_contains": ["helper", "home-assistant"]
+  },
+  {
+    "id": "q10",
+    "query": "esphome sensor troubleshooting logs",
+    "expected_contains": ["esphome", "sensor", "troubleshooting"]
+  }
+]

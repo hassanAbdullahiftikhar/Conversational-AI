@@ -4,9 +4,32 @@ import os
 import threading
 import time
 from typing import Dict, Optional
+import aiosqlite
+import json
+from pathlib import Path
+from asyncio import Lock
 
 SESSION_TTL_SECONDS = int(os.getenv("SESSION_TTL_SECONDS", "7200"))  # 2-hour idle TTL
 MAX_SESSIONS = int(os.getenv("MAX_SESSIONS", "1000"))  # hard cap against memory exhaustion
+
+# SQLite persistence for CRM - use /tmp which is always writable in Docker
+_CRM_DB = Path("/tmp/crm_profiles.db")
+_CRM_LOCK = Lock()
+
+
+async def _init_crm_db():
+    """Initialize CRM SQLite database with WAL mode."""
+    async with aiosqlite.connect(_CRM_DB, isolation_level=None) as db:
+        await db.execute("PRAGMA journal_mode=WAL")
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS crm_profiles (
+                session_id TEXT PRIMARY KEY,
+                user_id TEXT,
+                profile_json TEXT NOT NULL,
+                updated_at REAL NOT NULL
+            )
+        """)
+        await db.execute("CREATE INDEX IF NOT EXISTS idx_user_id ON crm_profiles(user_id)")
 
 
 class SessionStore:
@@ -134,3 +157,79 @@ class SessionStore:
             metadata["memory_summary"] = ""
             metadata["memory_summary_hash"] = ""
             metadata["last_user_message"] = ""
+
+    def get_crm_profile(self, session_id: str) -> dict:
+        with self._lock:
+            session = self._sessions.get(session_id)
+            if session is None:
+                return {}
+            metadata = session.setdefault("metadata", {})
+            profile = metadata.get("crm_profile")
+            if isinstance(profile, dict):
+                return dict(profile)
+            return {}
+
+    def update_crm_profile(self, session_id: str, updates: dict) -> dict:
+        with self._lock:
+            session = self._sessions.get(session_id)
+            if session is None:
+                return {}
+
+            metadata = session.setdefault("metadata", {})
+            existing = metadata.get("crm_profile")
+            profile = dict(existing) if isinstance(existing, dict) else {}
+            profile.update({k: v for k, v in updates.items() if v is not None})
+            metadata["crm_profile"] = profile
+            return dict(profile)
+
+    async def get_crm_profile_async(self, session_id: str) -> dict:
+        async with _CRM_LOCK:
+            async with aiosqlite.connect(str(_CRM_DB), isolation_level=None) as db:
+                await db.execute("PRAGMA journal_mode=WAL")
+                db.row_factory = aiosqlite.Row
+                async with db.execute(
+                    "SELECT profile_json FROM crm_profiles WHERE session_id = ?",
+                    (session_id,)
+                ) as cursor:
+                    row = await cursor.fetchone()
+                    if row:
+                        return json.loads(row["profile_json"])
+                    return {}
+
+    async def update_crm_profile_async(self, session_id: str, updates: dict) -> dict:
+        async with _CRM_LOCK:
+            async with aiosqlite.connect(str(_CRM_DB), isolation_level=None) as db:
+                await db.execute("PRAGMA journal_mode=WAL")
+                db.row_factory = aiosqlite.Row
+                async with db.execute(
+                    "SELECT profile_json FROM crm_profiles WHERE session_id = ?",
+                    (session_id,)
+                ) as cursor:
+                    row = await cursor.fetchone()
+                    current = json.loads(row["profile_json"]) if row else {}
+                current.update({k: v for k, v in updates.items() if v is not None})
+                profile_json = json.dumps(current, ensure_ascii=False)
+                now = time.time()
+                await db.execute(
+                    """INSERT INTO crm_profiles (session_id, profile_json, updated_at)
+                       VALUES (?, ?, ?)
+                       ON CONFLICT(session_id) DO UPDATE SET
+                       profile_json = excluded.profile_json,
+                       updated_at = excluded.updated_at""",
+                    (session_id, profile_json, now)
+                )
+                return dict(current)
+
+    async def get_profile_by_user_id_async(self, user_id: str) -> dict | None:
+        async with _CRM_LOCK:
+            async with aiosqlite.connect(str(_CRM_DB), isolation_level=None) as db:
+                await db.execute("PRAGMA journal_mode=WAL")
+                db.row_factory = aiosqlite.Row
+                async with db.execute(
+                    "SELECT profile_json FROM crm_profiles WHERE user_id = ?",
+                    (user_id,)
+                ) as cursor:
+                    row = await cursor.fetchone()
+                    if row:
+                        return json.loads(row["profile_json"])
+                    return None

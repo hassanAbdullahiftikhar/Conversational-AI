@@ -7,10 +7,8 @@ import httpx
 
 class MemorySummarizer:
     def __init__(self) -> None:
-        self.base_url = os.getenv("OLLAMA_URL", "http://ollama:11434").rstrip("/")
-        self.model = os.getenv("OLLAMA_MODEL", "qwen3.5:2b-q4_K_M")
-        self.num_ctx = int(os.getenv("SUMMARY_NUM_CTX", "2048"))
-        self.num_predict = int(os.getenv("SUMMARY_NUM_PREDICT", "220"))
+        self.base_url = os.getenv("LLM_URL", "http://llm-engine:11434").rstrip("/")
+        self.model = os.getenv("LLM_MODEL", "gemma-4-E4B-it")
         self.temperature = float(os.getenv("SUMMARY_TEMPERATURE", "0.2"))
 
     async def summarize(self, rounds_text: str) -> str:
@@ -33,22 +31,21 @@ class MemorySummarizer:
 
         payload = {
             "model": self.model,
-            "prompt": prompt,
+            "messages": [{"role": "user", "content": prompt}],
             "stream": False,
-            "options": {
-                "num_predict": self.num_predict,
-                "num_ctx": self.num_ctx,
-                "temperature": self.temperature,
-                "top_p": 0.9,
-                "top_k": 40,
-            },
+            "temperature": self.temperature,
+            "max_tokens": 250,
         }
 
         timeout = httpx.Timeout(connect=10.0, write=30.0, read=90.0, pool=30.0)
         async with httpx.AsyncClient(timeout=timeout) as client:
-            response = await client.post(f"{self.base_url}/api/generate", json=payload)
+            response = await client.post(f"{self.base_url}/v1/chat/completions", json=payload)
             response.raise_for_status()
             data = response.json()
-            if "error" in data:
-                raise RuntimeError(f"Ollama summarization error: {data['error']}")
-            return str(data.get("response", "")).strip()
+            
+            choices = data.get("choices", [])
+            if not choices:
+                return ""
+                
+            message = choices[0].get("message", {})
+            return str(message.get("content", "")).strip()

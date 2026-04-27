@@ -26,6 +26,7 @@ export default function MessageBubble({
   isStreaming,
   isMuted,
   onToggleMute,
+  onReplay,
 }) {
   const isAssistant = role === "assistant";
   const [copied, setCopied] = useState(false);
@@ -40,12 +41,18 @@ export default function MessageBubble({
     }
   };
 
+  const handleReplay = () => {
+    if (typeof onReplay === "function") {
+      onReplay(content);
+    }
+  };
+
   return (
     <div className={`bubble-row ${isAssistant ? "assistant-row" : "user-row"}`}>
       {isAssistant && <div className="bot-avatar">N</div>}
       <div className={`bubble-stack ${isAssistant ? "assistant-stack" : "user-stack"}`}>
         <div className="bubble-meta">
-          <span className="bubble-author">{isAssistant ? "Nexa" : "You"}</span>
+          <span className="bubble-author">{isAssistant ? "Assistant" : "You"}</span>
           {isStreaming && isAssistant ? <span className="bubble-live">Streaming</span> : null}
         </div>
         <div className={`bubble ${isAssistant ? "assistant-bubble" : "user-bubble"}`}>
@@ -68,6 +75,17 @@ export default function MessageBubble({
               onClick={() => onToggleMute(messageId)}
             >
               {isMuted ? "Unmute" : "Mute"}
+            </button>
+          ) : null}
+          {isAssistant && typeof onReplay === "function" ? (
+            <button
+              type="button"
+              className="bubble-replay-toggle ds-action-button ds-focus-ring"
+              onClick={handleReplay}
+              aria-label="Replay assistant response"
+              title="Replay response with current voice settings"
+            >
+              Replay
             </button>
           ) : null}
         </div>

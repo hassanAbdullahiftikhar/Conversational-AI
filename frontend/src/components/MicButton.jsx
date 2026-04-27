@@ -31,7 +31,7 @@ export default function MicButton({ isRecording, isProcessing, onClick, disabled
   return (
     <button
       type="button"
-      className={`mic-button${isRecording ? " recording" : ""}${isProcessing ? " processing" : ""}`}
+      className={`mic-button ds-focus-ring${isRecording ? " recording" : ""}${isProcessing ? " processing" : ""}`}
       onClick={onClick}
       disabled={disabled}
       aria-label={isRecording ? "Stop recording" : isProcessing ? "Processing voice" : "Start recording"}

@@ -44,10 +44,10 @@ export default function WelcomeScreen({ onQuickPrompt, isConnected }) {
           </div>
 
           <div className="hero-avatar">N</div>
-          <p className="welcome-eyebrow ds-kicker">NexaKart support workspace</p>
+          <p className="welcome-eyebrow ds-kicker">Smart Home support workspace</p>
           <h2 className="welcome-heading">Resolve orders, returns, and warranty questions in one conversational surface.</h2>
           <p className="welcome-subtitle">
-            Nexa combines streaming responses, live voice capture, and voice playback controls so support feels immediate instead of transactional.
+            This assistant combines streaming responses, live voice capture, and voice playback controls so support feels immediate instead of transactional.
           </p>
 
           <div className="category-pills">

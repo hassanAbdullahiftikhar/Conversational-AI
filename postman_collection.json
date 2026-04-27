@@ -10,6 +10,10 @@
       "value": "http://localhost:8000"
     },
     {
+      "key": "conv_manager_url",
+      "value": "http://localhost:8001"
+    },
+    {
       "key": "session_id",
       "value": ""
     },
@@ -152,7 +156,7 @@
       "request": {
         "method": "GET",
         "header": [],
-        "description": "Documentation-only request. To test WebSocket, open Postman WebSocket tab and connect to ws://localhost:8000/ws/chat/{{session_id}}?token={{session_token}}. Both variables are auto-populated by the Create Session request. Send JSON: {\"type\":\"user_message\",\"content\":\"Where is my order?\"}. Expect stream events: token, done, or error.",
+        "description": "Documentation-only request. To test WebSocket, open Postman WebSocket tab and connect to ws://localhost:8000/ws/chat/{{session_id}}?token={{session_token}}. Both variables are auto-populated by the Create Session request. Send JSON: {\"type\":\"user_message\",\"content\":\"Where is my order?\"}. Stream events: token, done, error, asr_partial, asr_final, audio_segment. The `done` payload now includes timing diagnostics and optional retrieval citations: {\"type\":\"done\",\"response_id\":\"...\",\"timings\":{...},\"sources\":[{\"source\":\"home_assistant\",\"path\":\"...\",\"title\":\"...\"}] }.",
         "url": {
           "raw": "{{base_url}}/health",
           "host": [
@@ -160,6 +164,35 @@
           ],
           "path": [
             "health"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Tool Router Execute (conv-manager)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "description": "Direct internal test of typed tool router. Requires an existing session_id from Create Session.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"session_id\": \"{{session_id}}\",\n  \"tool\": \"search_docs\",\n  \"arguments\": {\n    \"query\": \"zigbee troubleshooting\",\n    \"top_k_parents\": 3\n  },\n  \"call_id\": \"manual-postman-1\"\n}"
+        },
+        "url": {
+          "raw": "{{conv_manager_url}}/internal/tool-router/execute",
+          "host": [
+            "{{conv_manager_url}}"
+          ],
+          "path": [
+            "internal",
+            "tool-router",
+            "execute"
           ]
         }
       },

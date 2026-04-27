@@ -1,5 +1,6 @@
 import React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import ChatWindow from "./components/ChatWindow";
 import MicButton from "./components/MicButton";
 import SessionControls from "./components/SessionControls";
@@ -32,7 +33,16 @@ export default function App() {
   const [mutedResponseIds, setMutedResponseIds] = useState([]);
   const [renderedView, setRenderedView] = useState("welcome");
   const [viewPhase, setViewPhase] = useState("idle");
+  const [diagnosticsEnabled, setDiagnosticsEnabled] = useState(() => {
+    try {
+      return window.localStorage.getItem("nexa_debug_mode") === "1";
+    } catch {
+      return false;
+    }
+  });
+  const [lastDiagnostics, setLastDiagnostics] = useState(null);
   const activeResponseIdRef = useRef(null);
+  const prefersReducedMotion = useReducedMotion();
 
   const {
     enqueueChunk,
@@ -59,10 +69,34 @@ export default function App() {
     });
   }, [stopAudioPlayback]);
 
-  const onDone = useCallback(() => {
+  const onDone = useCallback((responseId, timings, sources) => {
     setIsStreaming(false);
     setIsProcessing(false);
     setPartialTranscript("");
+    setLastDiagnostics({
+      responseId,
+      timings: typeof timings === "object" ? timings : {},
+      sources: Array.isArray(sources) ? sources : [],
+    });
+
+    if (!responseId) {
+      return;
+    }
+
+    setMessages((prev) =>
+      prev.map((message) => {
+        if (message.id !== responseId || message.role !== "assistant") {
+          return message;
+        }
+        return {
+          ...message,
+          diagnostics: {
+            timings: typeof timings === "object" ? timings : {},
+            sources: Array.isArray(sources) ? sources : [],
+          },
+        };
+      })
+    );
   }, []);
 
   const onError = useCallback((errorText) => {
@@ -240,6 +274,24 @@ export default function App() {
     sendMessage(trimmed);
   }, [inputValue, isBusy, isConnected, sendMessage, stopAudioPlayback]);
 
+  const handleReplayResponse = useCallback(
+    (content) => {
+      const trimmed = String(content || "").trim();
+      if (!trimmed || isBusy || !isConnected) {
+        return;
+      }
+
+      stopAudioPlayback();
+      sendRaw(
+        JSON.stringify({
+          type: "replay_assistant_message",
+          content: trimmed,
+        })
+      );
+    },
+    [isBusy, isConnected, sendRaw, stopAudioPlayback]
+  );
+
   const handleQuickPrompt = useCallback((prompt) => {
     if (!isConnected || isBusy) {
       setInputValue(prompt);
@@ -309,6 +361,17 @@ export default function App() {
     if (event.key === "Enter") handleSend();
   };
 
+  const toggleDiagnostics = useCallback(() => {
+    setDiagnosticsEnabled((prev) => {
+      const next = !prev;
+      try {
+        window.localStorage.setItem("nexa_debug_mode", next ? "1" : "0");
+      } catch {
+      }
+      return next;
+    });
+  }, []);
+
   const currentVoiceLabel = VOICE_LABELS[currentVoice] || "Bella";
   const inputStatusText = !isConnected
     ? "Reconnecting to support services"
@@ -326,7 +389,7 @@ export default function App() {
         <div className="brand">
           <div className="brand-logo">N</div>
           <div className="brand-text">
-            <span className="brand-name">NexaKart</span>
+            <span className="brand-name">Smart Home</span>
             <span className="brand-tagline">Voice-first customer support workspace</span>
           </div>
         </div>
@@ -344,24 +407,41 @@ export default function App() {
             onSpeechToggle={handleSpeechToggle}
             disabled={!isConnected || isBusy}
           />
-          <SessionControls onNewSession={onNewSession} onReset={onReset} isConnected={isConnected} />
+          <SessionControls
+            onNewSession={onNewSession}
+            onReset={onReset}
+            isConnected={isConnected}
+            diagnosticsEnabled={diagnosticsEnabled}
+            onToggleDiagnostics={toggleDiagnostics}
+          />
         </div>
       </header>
 
       <main className="content-stage ds-view-stage">
-        <div className={`content-stage-shell ds-view-shell phase-${viewPhase} view-${renderedView}`}>
-          {renderedView === "welcome" ? (
-            <WelcomeScreen onQuickPrompt={handleQuickPrompt} isConnected={isConnected} />
-          ) : (
-            <ChatWindow
-              messages={messages}
-              isStreaming={isStreaming}
-              partialTranscript={partialTranscript}
-              mutedResponseIds={mutedResponseIds}
-              onToggleMuteResponse={toggleMuteResponse}
-            />
-          )}
-        </div>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={renderedView}
+            className={`content-stage-shell ds-view-shell phase-${viewPhase} view-${renderedView}`}
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 14, scale: 0.99, filter: "blur(5px)" }}
+            animate={prefersReducedMotion ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" } : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+            exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -10, scale: 0.995, filter: "blur(4px)" }}
+            transition={{ duration: prefersReducedMotion ? 0 : 0.24, ease: [0.2, 0.75, 0.2, 1] }}
+          >
+            {renderedView === "welcome" ? (
+              <WelcomeScreen onQuickPrompt={handleQuickPrompt} isConnected={isConnected} />
+            ) : (
+              <ChatWindow
+                messages={messages}
+                isStreaming={isStreaming}
+                partialTranscript={partialTranscript}
+                mutedResponseIds={mutedResponseIds}
+                onToggleMuteResponse={toggleMuteResponse}
+                onReplayResponse={handleReplayResponse}
+                diagnosticsEnabled={diagnosticsEnabled}
+              />
+            )}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       <div className="input-area">
@@ -384,7 +464,7 @@ export default function App() {
               />
               <button
                 type="button"
-                className="send-btn"
+                className="send-btn ds-focus-ring"
                 onClick={handleSend}
                 disabled={isBusy || !inputValue.trim() || !isConnected}
               >
@@ -400,6 +480,22 @@ export default function App() {
                 : "Voice playback is currently off."}
             </span>
           </div>
+          {diagnosticsEnabled && lastDiagnostics ? (
+            <div className="diagnostics-strip" role="status" aria-live="polite">
+              <span>
+                TTFT {Number(lastDiagnostics.timings?.ttft_ms || 0)}ms
+              </span>
+              <span>
+                Pipeline {Number(lastDiagnostics.timings?.pipeline_wall_ms || 0)}ms
+              </span>
+              <span>
+                Tool {Number(lastDiagnostics.timings?.tool_exec_ms || 0)}ms
+              </span>
+              <span>
+                Sources {Array.isArray(lastDiagnostics.sources) ? lastDiagnostics.sources.length : 0}
+              </span>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

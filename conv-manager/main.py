@@ -2,15 +2,17 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import re
 
 from fastapi import Depends, FastAPI
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from history_manager import HistoryManager
 from memory_summarizer import MemorySummarizer
 from policy_enforcer import PolicyEnforcer
 from prompt_builder import PromptBuilder
-from session_store import SessionStore
+from session_store import SessionStore, _init_crm_db
+from tool_router import ToolRouter
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("conv-manager")
@@ -22,6 +24,18 @@ _history = HistoryManager(_store)
 _summarizer = MemorySummarizer()
 _prompt_builder = PromptBuilder()
 _policy_enforcer = PolicyEnforcer()
+_tool_router = ToolRouter(_store)
+
+_HIDDEN_REASONING_BLOCK_RE = re.compile(
+    r"<\|think\|>.*?<\|/think\|>|<think>.*?</think>",
+    re.IGNORECASE | re.DOTALL,
+)
+
+
+def _sanitize_assistant_history_content(content: str) -> str:
+    """Remove hidden reasoning tags before persisting assistant output in session history."""
+    cleaned = _HIDDEN_REASONING_BLOCK_RE.sub("", content)
+    return cleaned.strip()
 
 
 async def _safe_compact(session_id: str) -> None:
@@ -35,6 +49,8 @@ async def _safe_compact(session_id: str) -> None:
 class BuildPromptRequest(BaseModel):
     session_id: str
     user_message: str
+    retrieval_context: str = ""
+    tool_context: str = ""
 
 
 class UpdateHistoryRequest(BaseModel):
@@ -45,6 +61,13 @@ class UpdateHistoryRequest(BaseModel):
 
 class SessionRequest(BaseModel):
     session_id: str
+
+
+class ToolExecuteRequest(BaseModel):
+    session_id: str
+    tool: str
+    arguments: dict = Field(default_factory=dict)
+    call_id: str | None = None
 
 
 def get_store() -> SessionStore:
@@ -66,15 +89,24 @@ async def build_prompt(payload: BuildPromptRequest, store: SessionStore = Depend
             return {"prompt": None, "blocked": True, "block_reason": reason}
 
         history = _history.get_recent_full_history(payload.session_id, recent_rounds=5)
-        trimmed = _history.trim_to_token_budget(history)
         summary = _history.get_summary(payload.session_id)
-        prompt = _prompt_builder.build_prompt(
+
+        prompt_package = _prompt_builder.build_prompt_package(
             system_prompt=_prompt_builder.get_system_prompt(),
-            history=trimmed,
+            history=history,
             summary_context=summary,
             user_message=payload.user_message,
+            retrieval_context=payload.retrieval_context,
+            tool_context=payload.tool_context,
         )
-        return {"prompt": prompt, "blocked": False, "block_reason": None}
+        return {
+            "prompt": prompt_package["prompt"],
+            "chat_messages": prompt_package["chat_messages"],
+            "slot_budget": prompt_package["slot_budget"],
+            "token_usage_estimate": prompt_package["token_usage_estimate"],
+            "blocked": False,
+            "block_reason": None,
+        }
     except Exception as exc:
         logger.exception("action=build_prompt_failed session_id=%s error=%s", payload.session_id, type(exc).__name__)
         raise
@@ -84,7 +116,11 @@ async def build_prompt(payload: BuildPromptRequest, store: SessionStore = Depend
 async def update_history(payload: UpdateHistoryRequest) -> dict:
     try:
         logger.info("action=update_history session_id=%s", payload.session_id)
-        _history.add_turn(payload.session_id, payload.role, payload.content)
+        content = payload.content
+        if payload.role == "assistant":
+            content = _sanitize_assistant_history_content(content)
+
+        _history.add_turn(payload.session_id, payload.role, content)
 
         if payload.role == "assistant":
             asyncio.create_task(_safe_compact(payload.session_id))
@@ -93,6 +129,26 @@ async def update_history(payload: UpdateHistoryRequest) -> dict:
         return {"success": True, "turn_count": turn_count}
     except Exception as exc:
         logger.exception("action=update_history_failed session_id=%s error=%s", payload.session_id, type(exc).__name__)
+        raise
+
+
+@app.post("/internal/tool-router/execute")
+async def execute_tool(payload: ToolExecuteRequest) -> dict:
+    try:
+        logger.info("action=tool_execute session_id=%s tool=%s", payload.session_id, payload.tool)
+        return await _tool_router.execute(
+            session_id=payload.session_id,
+            tool=payload.tool,
+            arguments=payload.arguments,
+            call_id=payload.call_id,
+        )
+    except Exception as exc:
+        logger.exception(
+            "action=tool_execute_failed session_id=%s tool=%s error=%s",
+            payload.session_id,
+            payload.tool,
+            type(exc).__name__,
+        )
         raise
 
 
@@ -127,6 +183,19 @@ def delete_session(session_id: str) -> dict:
     except Exception as exc:
         logger.exception("action=delete_session_failed session_id=%s error=%s", session_id, type(exc).__name__)
         raise
+
+
+@app.on_event("startup")
+async def on_startup() -> None:
+    await _init_crm_db()
+    asyncio.create_task(_start_ttl_cleanup_task())
+
+
+async def _start_ttl_cleanup_task() -> None:
+    while True:
+        await asyncio.sleep(3600)  # Every hour
+        _store._evict_expired_locked()
+        logger.info("action=ttl_cleanup_ran")
 
 
 @app.get("/health")

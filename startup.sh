@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
-MODEL_TAG="qwen3.5:2b-q4_K_M"
-MAX_RETRIES=30
+
+MAX_RETRIES=60
+LLM_MAX_RETRIES=180
 POLL_INTERVAL=10
 
 # ── Parse optional flags ───────────────────────────────────────
@@ -49,25 +50,32 @@ for i in $(seq 1 $MAX_RETRIES); do
     sleep $POLL_INTERVAL
 done
 
-# ── Health poll: Ollama ────────────────────────────────────────
-echo "Waiting for Ollama to initialize..."
-for i in $(seq 1 $MAX_RETRIES); do
-    if curl -sf http://localhost:11434/api/tags > /dev/null 2>&1; then
-        echo "Ollama is healthy."
+# ── Health poll: llm-engine ────────────────────────────────────
+echo "Waiting for llm-engine to initialize (model download may take up to 10 minutes)..."
+for i in $(seq 1 $LLM_MAX_RETRIES); do
+    if curl -sf http://localhost:11434/health > /dev/null 2>&1; then
+        echo "llm-engine is healthy."
         break
     fi
-    echo "  Waiting for Ollama... ($i/$MAX_RETRIES)"
+    dl_mb=$(docker exec conversational-ai-llm-engine-1 sh -lc "du -sm /root/.cache/huggingface/hub/models--unsloth--gemma-4-E4B-it-GGUF/blobs/*.downloadInProgress 2>/dev/null | awk '{sum+=\$1} END {print sum+0}'" 2>/dev/null || echo 0)
+    dl_pct=$((dl_mb * 100 / 5000))
+    if [ "$dl_pct" -gt 99 ]; then dl_pct=99; fi
+    echo "  Waiting for llm-engine... ($i/$LLM_MAX_RETRIES)  download~${dl_mb}MB (${dl_pct}%)"
     sleep $POLL_INTERVAL
 done
 
-# ── Pull LLM model ────────────────────────────────────────────
-echo "Pulling model inside ollama container..."
-docker compose exec ollama sh -lc "ollama list | grep -q \"$MODEL_TAG\" || ollama pull \"$MODEL_TAG\""
-if [ $? -ne 0 ]; then
-    echo "WARNING: model pull failed."
-fi
+# ── Health poll: API gateway ───────────────────────────────────
+echo "Waiting for api-gateway to initialize..."
+for i in $(seq 1 $MAX_RETRIES); do
+    if curl -sf http://localhost:8000/health > /dev/null 2>&1; then
+        echo "api-gateway is healthy."
+        break
+    fi
+    echo "  Waiting for api-gateway... ($i/$MAX_RETRIES)"
+    sleep $POLL_INTERVAL
+done
 
 echo ""
 echo "═══════════════════════════════════════════════════"
-echo "  NexaKart ready at http://localhost:3000"
+echo "  Smart Home Assistant ready at http://localhost:3000"
 echo "═══════════════════════════════════════════════════"

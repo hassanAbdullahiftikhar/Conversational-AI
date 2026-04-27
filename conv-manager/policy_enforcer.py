@@ -5,7 +5,7 @@ import unicodedata
 
 
 class PolicyEnforcer:
-    MAX_MESSAGE_LENGTH = int(os.getenv("MAX_MESSAGE_LENGTH", "500"))
+    MAX_MESSAGE_LENGTH = int(os.getenv("MAX_MESSAGE_LENGTH", "2000"))
 
     INJECTION_KEYWORDS = [
         "ignore your instructions",
@@ -42,8 +42,9 @@ class PolicyEnforcer:
         for keyword in self.INJECTION_KEYWORDS:
             if keyword in normalized:
                 return False, (
-                    "I'm here to help with order and account questions. "
-                    "Is there something I can assist you with?"
+                    "I am a Smart Home Ecosystem Specialist. "
+                    "I cannot process instructions that attempt to alter my persona or system rules. "
+                    "Do you have a question about your smart home setup?"
                 )
 
         return True, None

@@ -18,7 +18,8 @@ services:
     build: ./conv-manager
     restart: unless-stopped
     volumes:
-      - ./conv-manager/smart_home_rag/data:/app/smart_home_rag/data:ro
+      - ./conv-manager:/app
+      - ./conv-manager/smart_home_rag/data:/app/smart_home_rag/data
       - conv-manager-crm:/tmp
     healthcheck:
       test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')" ]
@@ -34,6 +35,8 @@ services:
     ports:
       - "8000:8000"
     restart: unless-stopped
+    volumes:
+      - ./api-gateway:/app
     healthcheck:
       test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" ]
       interval: 30s
@@ -43,6 +46,7 @@ services:
       CONV_MANAGER_URL: http://conv-manager:8001
       LLM_URL: http://llm-engine:11434
       EMBED_URL: http://llm-engine:11434
+      EVAL_MODE: "true"
       LLM_MODEL: gemma-4-E4B-it
       # Voice extension
       ASR_SERVICE_WS_URL: ws://asr-service:8002/ws/transcribe

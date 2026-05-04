@@ -27,7 +27,7 @@ class LlmConnectionError(Exception):
 
 class LlmClient:
     def __init__(self, base_url: str | None = None, _shared_client: httpx.AsyncClient | None = None) -> None:
-        self.base_url = base_url or os.getenv("LLM_URL", "http://llm-engine:11434")
+        self.base_url = base_url or os.getenv("LLM_URL", "http://localhost:11434")
         self.base_url = self.base_url.rstrip("/")
         
         self.model = os.getenv("LLM_MODEL", "gemma-4-E4B-it")

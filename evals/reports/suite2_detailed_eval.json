@@ -1,0 +1,21 @@
+[
+  {
+    "question": "What communication protocols does Home Assistant support natively?",
+    "assistant_answer": "Home Assistant supports a wide array of communication protocols through various integrations. Natively, it handles protocols such as Zigbee (via ZHA), Z-Wave JS, Wi-Fi (MQTT, ESPHome, custom integrations), Bluetooth, and integrates with major cloud platforms and ecosystems like Philips Hue and Apple HomeKit. It is highly modular, allowing support for nearly any IoT device if an integration exists or can be custom-written.",
+    "ground_truth": "Home Assistant natively supports several communication protocols including Zigbee, Z-Wave, MQTT, Matter, and Thread.",
+    "retrieved_contexts": [
+      "## Restarting Home Assistant in safe mode\n\nIf your Home Assistant is acting up and you cannot identify a root cause, you can use **Safe mode** to narrow down the number of possible causes.\n**Safe mode** loads Home Assistant Core, but no cus",
+      "## Additional technical details\n\n- **Efficient Communication Protocol**: ESPHome uses a lightweight, bi-directional protocol over TCP, optimized for microcontrollers. This protocol is implemented in [aioesphomeapi](https://github.com/esphom",
+      "## Example\n\n```yaml\ndisplay:\n  - platform: nextion\n    id: nextion1\n    uart_id: uart_nextion\n    on_custom_binary_sensor:\n      then:\n        - lambda: |-\n            // key: name sent by the Nextion (string)\n            // value: decoded ",
+      "## Coordinator backups\n\nNote that only adapters based on zStack or EmberZNet currently support backing up the coordinator (`coordinator_backup.json`).\n\n#### Flashing an existing adapter\n\nFlashing tools can be used to upgrade the firmware on",
+      "## Configuration variables\n\nThe configuration is made up of two parts: The central component, and individual Binary sensors per channel.\n\n- **address** (*Optional*, int): The I\u00b2C address of the sensor. Defaults to `0x5A`.\n- **id** (*Optiona",
+      "## Generic device options\n\nEvery Zigbee Device supports the following list of options.\n\n**`friendly_name`**  \nUsed in the MQTT topic of a device. By default, this is the device ID (e.g. `0x00128d0001d9e1d2`).\n\n::: tip\nYou can use the `/` se",
+      "Remote update (Zigbee and Core), modern UI firmware. Optoelectronic isolation for Ethernet, LEDs and physical button for interacting with users. It fits home and business use.\n\n- Zigbee firmware:  \n  -- [Zigbee chip update process OTA](http",
+      "## Notes\n\nBefore buying an adapter, please read the notes below!\n\n- Want to migrate to a different adapter? This may require repairing all your devices in some cases, see [FAQ](../faq/README.md#what-does-and-does-not-require-repairing-of-al",
+      "## Document Introduction\n\nMQTT (aka MQ Telemetry Transport) is a machine-to-machine or \"Internet of Things\" connectivity protocol on top of TCP/IP. It allows extremely lightweight publish/subscribe messaging transport.\n\n{% include integrati",
+      "## Key features\n\n- **YAML Configuration**: Specify hardware components, sensors, actuators, and integrations using a clean and straightforward YAML syntax.\n- **Custom Firmware Generation**: ESPHome compiles the provided configuration into a",
+      "During the migration steps, INFO messages will be logged to inform you about the progress of the migration.\n\n{% important %}\nConsider testing the migration process in a non-production environment before applying it to a live system.\n{% endi",
+      "{% note %}\nTo see what each abbreviation stands for, refer to the [list of supported abbreviations in MQTT discovery messages](/integrations/mqtt/#supported-abbreviations-in-mqtt-discovery-messages).\n{% endnote %}\n\nThe components id's under"
+    ]
+  }
+]

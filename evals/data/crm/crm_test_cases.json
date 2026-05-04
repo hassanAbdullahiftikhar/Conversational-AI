@@ -1,0 +1,163 @@
+{
+  "crud_tests": [
+    {
+      "id": "crm_crud_001",
+      "description": "Create and then read a simple profile",
+      "user_id": "user_test_001",
+      "write_key": "name",
+      "write_value": "Alice Johnson",
+      "read_key": "name",
+      "expected_read_value": "Alice Johnson"
+    },
+    {
+      "id": "crm_crud_002",
+      "description": "Update an existing key in a profile",
+      "user_id": "user_test_002",
+      "initial_data": {
+        "city": "New York"
+      },
+      "write_key": "city",
+      "write_value": "Brooklyn",
+      "read_key": "city",
+      "expected_read_value": "Brooklyn"
+    },
+    {
+      "id": "crm_crud_003",
+      "description": "Delete a key from a profile",
+      "user_id": "user_test_003",
+      "initial_data": {
+        "hub": "Home Assistant"
+      },
+      "delete_key": "hub",
+      "read_key": "hub",
+      "expected_read_value": null
+    },
+    {
+      "id": "crm_crud_004",
+      "description": "Read non-existent profile",
+      "user_id": "non_existent_user",
+      "read_key": "any_key",
+      "expected_read_value": null
+    },
+    {
+      "id": "crm_crud_005",
+      "description": "Store and retrieve non-ASCII characters",
+      "user_id": "user_test_005",
+      "write_key": "name",
+      "write_value": "طارق محمود",
+      "read_key": "name",
+      "expected_read_value": "طارق محمود"
+    },
+    {
+      "id": "crm_crud_006",
+      "description": "Store and retrieve hub brand with spaces",
+      "user_id": "user_test_006",
+      "write_key": "hub_type",
+      "write_value": "Philips Hue Bridge",
+      "read_key": "hub_type",
+      "expected_read_value": "Philips Hue Bridge"
+    },
+    {
+      "id": "crm_crud_007",
+      "description": "Overwrite with empty string",
+      "user_id": "user_test_007",
+      "initial_data": {
+        "note": "has content"
+      },
+      "write_key": "note",
+      "write_value": "",
+      "read_key": "note",
+      "expected_read_value": ""
+    },
+    {
+      "id": "crm_crud_008",
+      "description": "Multiple keys for same user",
+      "user_id": "user_test_008",
+      "writes": [
+        {
+          "key": "name",
+          "value": "Bob"
+        },
+        {
+          "key": "city",
+          "value": "London"
+        }
+      ],
+      "read_checks": [
+        {
+          "key": "name",
+          "expected": "Bob"
+        },
+        {
+          "key": "city",
+          "expected": "London"
+        }
+      ]
+    }
+  ],
+  "llm_invocation_tests": [
+    {
+      "id": "crm_llm_001",
+      "description": "Explicit introduction should trigger write",
+      "message": "Hi, my name is Sarah and I live in Seattle.",
+      "expected_tool": "crm_profile_write",
+      "expected_args_contains": {
+        "name": "Sarah",
+        "city": "Seattle"
+      }
+    },
+    {
+      "id": "crm_llm_002",
+      "description": "Implicit info sharing should trigger write",
+      "message": "I'm using a Sonoff dongle as my Zigbee coordinator.",
+      "expected_tool": "crm_profile_write",
+      "expected_args_contains": {
+        "hub_type": "Sonoff"
+      }
+    },
+    {
+      "id": "crm_llm_003",
+      "description": "Recall request should trigger read",
+      "message": "What is my name and where do I live?",
+      "expected_tool": "crm_profile_read",
+      "expected_args_contains": {
+        "include_fields": [
+          "name",
+          "city"
+        ]
+      }
+    },
+    {
+      "id": "crm_llm_004",
+      "description": "Personalized advice request should trigger read",
+      "message": "Based on my hub, which light bulbs should I buy?",
+      "expected_tool": "crm_profile_read",
+      "expected_args_contains": {
+        "include_fields": [
+          "hub_type"
+        ]
+      }
+    },
+    {
+      "id": "crm_llm_005",
+      "description": "Unrelated question should NOT trigger CRM",
+      "message": "What is the capital of France?",
+      "expected_tool": null
+    },
+    {
+      "id": "crm_llm_006",
+      "description": "Correction should trigger write update",
+      "message": "Actually, I moved to Portland recently.",
+      "expected_tool": "crm_profile_write",
+      "expected_args_contains": {
+        "city": "Portland"
+      }
+    },
+    {
+      "id": "crm_llm_007",
+      "description": "Formal greeting without info should NOT trigger write",
+      "message": "Hello, how are you today?",
+      "expected_tool": null
+    }
+  ]
+}

@@ -8,19 +8,21 @@ import re
 import time
 import uuid
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Optional
 
 import httpx
 import websockets
-from fastapi import APIRouter, Query, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, Query, WebSocket, WebSocketDisconnect, Request
+from fastapi.responses import JSONResponse
 
 from llm_client import LlmClient, LlmConnectionError, get_llm_http_client
 from session_router import verify_session_token
+from eval_state import track_tool_calls, clear_tracked_tool_calls
 
 logger = logging.getLogger("api-gateway.websocket")
 router = APIRouter()
-CONV_MANAGER_URL = os.getenv("CONV_MANAGER_URL", "http://conv-manager:8001")
-LLM_URL = os.getenv("LLM_URL", "http://llm-engine:11434")
+CONV_MANAGER_URL = os.getenv("CONV_MANAGER_URL", "http://localhost:8001")
+LLM_URL = os.getenv("LLM_URL", "http://localhost:11434")
 WS_SEMAPHORE = asyncio.Semaphore(10)
 
 _CM_LIMITS = httpx.Limits(max_connections=20, max_keepalive_connections=10)
@@ -197,7 +199,9 @@ def _normalize_tool_call(payload: dict[str, Any]) -> dict[str, Any] | None:
     call_id = data.get("call_id") or data.get("id") or uuid.uuid4().hex
     return {
         "tool": str(tool_name),
+        "tool_name": str(tool_name),
         "arguments": arguments,
+        "args": arguments,
         "call_id": str(call_id),
     }
 
@@ -340,7 +344,7 @@ def _looks_like_tool_call(text: str) -> bool:
         return True
     # Give the model a longer prefix window before deciding this is plain text.
     # Short responses are more likely to be direct answers, not tool calls.
-    if len(stripped) < 200:
+    if len(stripped) < 1000:
         return True
     if "```" in stripped or "<tool" in stripped.lower():
         return True
@@ -508,6 +512,7 @@ def _coerce_chat_messages(raw_chat_messages: Any) -> list[dict[str, str]]:
 async def _stream_with_tool_interception(
     *,
     llm: LlmClient,
+    session_id: str,
     prompt: str,
     messages: list[dict[str, str]],
     emit_token: Any,
@@ -522,7 +527,13 @@ async def _stream_with_tool_interception(
 
         planner_buffer += token
         has_json_markers = "```" in planner_buffer or "<tool_call" in planner_buffer.lower()
+        
+        # DEBUG: Log all tokens for evaluations
+        if os.getenv("EVAL_MODE") == "true":
+            logger.info("session_id=%s token_received=%s buffer_len=%d", session_id, token, len(planner_buffer))
+
         if not _looks_like_tool_call(planner_buffer) and not has_json_markers:
+            logger.info("session_id=%s action=passthrough reason=no_markers_found buffer=%s", "eval", repr(planner_buffer))
             passthrough = True
             await emit_token(planner_buffer)
             planner_buffer = ""
@@ -580,6 +591,7 @@ async def _run_llm_pipeline(
     prompt_build_ms = int((time.perf_counter() - prompt_build_start) * 1000)
     build_resp.raise_for_status()
     build_data = build_resp.json()
+    logger.info("session_id=%s build_data_received blocked=%s reason=%s", session_id, build_data.get("blocked"), build_data.get("block_reason"))
 
     if build_data.get("blocked"):
         await _ws_send_text(websocket, session_id, {"type": "error", "content": build_data.get("block_reason")})
@@ -669,10 +681,13 @@ async def _run_llm_pipeline(
         logger.info("action=llm_pipeline_stage session_id=%s stage=llm_stream_start", session_id)
         tool_calls, planner_metrics, planner_mode = await _stream_with_tool_interception(
             llm=llm,
+            session_id=session_id,
             prompt=prompt,
             messages=chat_messages,
             emit_token=_emit_user_visible_token,
         )
+        if tool_calls:
+            track_tool_calls(session_id, tool_calls)
         timings["planner_stream_mode"] = planner_mode
 
         if tool_calls:
@@ -738,6 +753,7 @@ async def _run_llm_pipeline(
                 followup_stream_start = time.perf_counter()
                 followup_tool_calls, _followup_metrics, followup_mode = await _stream_with_tool_interception(
                     llm=llm,
+                    session_id=session_id,
                     prompt=followup_prompt,
                     messages=followup_chat_messages,
                     emit_token=_emit_user_visible_token,
@@ -1144,3 +1160,79 @@ async def chat_ws(
         _ws_locks.pop(session_id, None)
         _replay_in_progress.pop(session_id, None)
         WS_SEMAPHORE.release()
+
+
+async def run_chat_rest(request: Request) -> Any:
+    """
+    Simulates a chat turn for REST clients (evaluations).
+    Captures tokens into a single response string.
+    """
+    try:
+        body = await request.json()
+    except Exception:
+        return JSONResponse(status_code=400, content={"error": "invalid_json"})
+
+    session_id = str(body.get("session_id") or uuid.uuid4())
+    clear_tracked_tool_calls(session_id)
+    user_message = str(body.get("message") or "").strip()
+    
+    if not user_message:
+        return {"response": "", "session_id": session_id}
+    
+    # Ensure session exists in conv-manager (idempotent)
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            await client.post(
+                f"{CONV_MANAGER_URL}/internal/create-session",
+                json={"session_id": session_id},
+            )
+    except Exception as exc:
+        logger.warning("session_id=%s action=run_chat_rest_session_creation_failed error=%s", session_id, type(exc).__name__)
+
+    # Mock WebSocket to reuse _run_llm_pipeline
+    class MockWebSocket:
+        def __init__(self):
+            self.full_response = ""
+            self.last_timings = {}
+            self.sources = []
+
+        async def accept(self): pass
+        async def close(self, code=1000): pass
+        
+        async def send_text(self, data_str):
+            data = json.loads(data_str)
+            if data.get("type") == "token":
+                self.full_response += data.get("content", "")
+            elif data.get("type") == "done":
+                self.last_timings = data.get("timings", {})
+                self.sources = data.get("sources", [])
+        
+        async def send_json(self, data):
+            await self.send_text(json.dumps(data))
+            
+        async def send_bytes(self, data): pass
+
+    mock_ws = MockWebSocket()
+    
+    # Run the pipeline
+    # We pass tts_enabled=False to avoid overhead during evals
+    try:
+        await _run_llm_pipeline(mock_ws, session_id, user_message, tts_enabled=False)
+    except Exception as exc:
+        logger.exception("session_id=%s action=run_chat_rest_failed error=%s", session_id, type(exc).__name__)
+        return JSONResponse(status_code=500, content={"error": "internal_error", "detail": str(exc)})
+    
+    headers = {
+        "X-Retrieval-Time-Ms": str(mock_ws.last_timings.get("tool_exec_ms_0", 0) if "search_docs" in str(mock_ws.last_timings.get("tool_name")) else 0),
+        "X-Tool-Time-Ms": str(mock_ws.last_timings.get("tool_exec_ms_0", 0) if "search_docs" not in str(mock_ws.last_timings.get("tool_name")) else 0)
+    }
+    
+    return JSONResponse(
+        content={
+            "response": mock_ws.full_response,
+            "session_id": session_id,
+            "timings": mock_ws.last_timings,
+            "sources": mock_ws.sources
+        },
+        headers=headers
+    )

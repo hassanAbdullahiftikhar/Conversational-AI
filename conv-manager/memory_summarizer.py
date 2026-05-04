@@ -7,7 +7,7 @@ import httpx
 
 class MemorySummarizer:
     def __init__(self) -> None:
-        self.base_url = os.getenv("LLM_URL", "http://llm-engine:11434").rstrip("/")
+        self.base_url = os.getenv("LLM_URL", "http://localhost:11434").rstrip("/")
         self.model = os.getenv("LLM_MODEL", "gemma-4-E4B-it")
         self.temperature = float(os.getenv("SUMMARY_TEMPERATURE", "0.2"))
 

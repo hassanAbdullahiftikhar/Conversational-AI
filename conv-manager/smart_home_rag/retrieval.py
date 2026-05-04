@@ -195,7 +195,7 @@ class RetrievalEngine:
         self.vector_size = vector_size
 
         if ollama_base_url is None:
-            ollama_base_url = os.getenv("EMBED_URL", "http://llm-engine:11434")
+            ollama_base_url = os.getenv("EMBED_URL", "http://localhost:11434")
         if ollama_model is None:
             ollama_model = os.getenv("EMBED_MODEL", "qwen3-embedding:0.6b")
 
@@ -234,7 +234,7 @@ class RetrievalEngine:
 
         self.embedder: OllamaEmbedder | LlamaCppEmbedder | None = None
         if embedding_mode in ("ollama", "llamacpp"):
-            base = ollama_base_url or os.getenv("EMBED_URL", "http://llm-engine:11434")
+            base = ollama_base_url or os.getenv("EMBED_URL", "http://localhost:11434")
             if embedding_mode == "llamacpp":
                 self.embedder = LlamaCppEmbedder(base_url=base)
             else:

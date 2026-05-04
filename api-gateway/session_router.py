@@ -11,7 +11,7 @@ from fastapi import APIRouter, Query
 from fastapi.responses import JSONResponse
 
 router = APIRouter()
-CONV_MANAGER_URL = os.getenv("CONV_MANAGER_URL", "http://conv-manager:8001")
+CONV_MANAGER_URL = os.getenv("CONV_MANAGER_URL", "http://localhost:8001")
 # Secret used to sign session tokens. Override in production via env var.
 _logger = logging.getLogger("api-gateway.session")
 _RAW_SECRET = os.getenv("SESSION_SECRET", "change-me-in-production")

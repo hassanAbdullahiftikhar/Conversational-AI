@@ -1,0 +1,74 @@
+{
+  "calculator_tests": [
+    {
+      "id": "calc_001",
+      "expression": "2 + 2",
+      "expected_result": 4.0
+    },
+    {
+      "id": "calc_002",
+      "expression": "10 * (5 + 3) / 2",
+      "expected_result": 40.0
+    },
+    {
+      "id": "calc_003",
+      "expression": "2 ** 10",
+      "expected_result": 1024.0
+    },
+    {
+      "id": "calc_004",
+      "expression": "100 * 0.15",
+      "expected_result": 15.0
+    }
+  ],
+  "weather_tests": [
+    {
+      "id": "weather_001",
+      "city": "London",
+      "must_contain": ["London", "temperature", "condition"]
+    },
+    {
+      "id": "weather_002",
+      "city": "San Francisco",
+      "must_contain": ["San Francisco"]
+    }
+  ],
+  "web_search_tests": [
+    {
+      "id": "web_001",
+      "query": "Home Assistant latest release notes",
+      "must_contain_intent": "find information about the recent version of HA"
+    },
+    {
+      "id": "web_002",
+      "query": "Best Zigbee door sensor 2024",
+      "must_contain_intent": "find recommendations or reviews for door sensors"
+    }
+  ],
+  "llm_tool_invocation_tests": [
+    {
+      "id": "tool_llm_001",
+      "message": "Calculate the area of a room that is 12.5 feet by 10.2 feet.",
+      "expected_tool": "calculator",
+      "expected_args_contains": {"expression": "12.5 * 10.2"}
+    },
+    {
+      "id": "tool_llm_002",
+      "message": "What is the weather like in New York right now?",
+      "expected_tool": "weather",
+      "expected_args_contains": {"city": "New York"}
+    },
+    {
+      "id": "tool_llm_003",
+      "message": "Search the web for the latest firmware version of the Sonoff ZBDongle-E.",
+      "expected_tool": "web_search",
+      "expected_args_contains": {"query": "Sonoff ZBDongle-E latest firmware version"}
+    },
+    {
+      "id": "tool_llm_004",
+      "message": "Is my Philips Hue bulb compatible with ZHA?",
+      "expected_tool": "check_device_compatibility",
+      "expected_args_contains": {"device_model": "Philips Hue bulb"}
+    }
+  ]
+}

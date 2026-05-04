@@ -1,0 +1,656 @@
+{
+  "mrr": 1.0,
+  "mean_recall_at_5": 1.0,
+  "results": [
+    {
+      "id": "rag_001",
+      "difficulty": "easy",
+      "type": "factual",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "e00874714271ef4eb4dd744243565fd46437547cfe18a796c49dfcc718cfa2b6",
+        "f27f7a4ff6226a6296111eaa7e07fbf983847acef9eb8d7a77e51f4816e2d88b",
+        "a2cca43327e6098bd30cedac185ae529987ef7d8df2f537ecd22dfdadb4c0ba5",
+        "0127df3612c086173981611283f34692e94ffb10c618c3cf28b64c6fc5cd4d56",
+        "098c485c71fd764df2082224cd898d028a74100f4f2ac4013c6b0d3b9798fe3f",
+        "b5dced9ea6f595e3f7f8a0f96f56c69b24366ad6348e0290cd0cf80bc8e44e32",
+        "62d0db2b2ac7df80c2fc03b85466892aa1b95482cce7744e0361131edb48a681",
+        "4e85023a110ed55c8d35f2018e9b4fc253fdedda055e4d16a9e930320155a60b",
+        "b09e56dd3d91ca7194d5a1b2a7c30261dbe244bece611a5a51469b7559725703",
+        "174a779c300f4800adb4316cccccb4632717b3db06ede9d13555abaec258c093",
+        "e74e1239159a10d4ebc69f34ebd0626e2008a095da95fd5519f1df513ead994e",
+        "d35abf40fc21566287dbe476ee08f088d21b82bb05c1ba5334a10c0ecea14fc4"
+      ],
+      "relevant_ids": [
+        "e00874714271ef4eb4dd744243565fd46437547cfe18a796c49dfcc718cfa2b6",
+        "f27f7a4ff6226a6296111eaa7e07fbf983847acef9eb8d7a77e51f4816e2d88b",
+        "a2cca43327e6098bd30cedac185ae529987ef7d8df2f537ecd22dfdadb4c0ba5"
+      ]
+    },
+    {
+      "id": "rag_002",
+      "difficulty": "easy",
+      "type": "factual",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "a3c4c03d7f731fbbaf0c1c5c717eedd1d4a8de4e0d8b933ccda3fed91383e6d7",
+        "df27e26b17c0b706536825ce1bc4cb49bdb05834212f5d38820b5756fe112bba",
+        "a8fc26fde6d9eb22b375382261049ed4b3b7cfb5c0851660bbfc2f4a83731776",
+        "078814a8f14bea232442e29455ce1e977833bd34cb94985ea9ce076c6725a2be",
+        "3abf08fa9a38fa2bae1f53fae6f46ecb1f699e9413586b9745f659524b96c938",
+        "56cc42aa08cb0742f887b7b5f169129b5fce0aecf754b1884555aa3d23e49926",
+        "60cf54bd3ede20ab48518fa0ba5d3ed981c58a62fac296b7131f81c8f02036ca",
+        "0127df3612c086173981611283f34692e94ffb10c618c3cf28b64c6fc5cd4d56",
+        "00aad9f5ddfe8c7cb6a63d652a04877c1dbce440295ee7b41a8a64f88757cb4b",
+        "71eff5187ea44143a853fc1ffa9a57eb71846c16d452bdefefe1f641cd8d82a9",
+        "f348801d0f24c23a54763778b23a39293aa24b8898e421156e8dcc0fd9ef90cd",
+        "b5dced9ea6f595e3f7f8a0f96f56c69b24366ad6348e0290cd0cf80bc8e44e32"
+      ],
+      "relevant_ids": [
+        "a3c4c03d7f731fbbaf0c1c5c717eedd1d4a8de4e0d8b933ccda3fed91383e6d7",
+        "df27e26b17c0b706536825ce1bc4cb49bdb05834212f5d38820b5756fe112bba",
+        "a8fc26fde6d9eb22b375382261049ed4b3b7cfb5c0851660bbfc2f4a83731776"
+      ]
+    },
+    {
+      "id": "rag_003",
+      "difficulty": "easy",
+      "type": "factual",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "b2417b9fa8e7895b40cf02a0802e7ee58eebbd9465f7ddc06a157c2fd03ac708",
+        "0127df3612c086173981611283f34692e94ffb10c618c3cf28b64c6fc5cd4d56",
+        "66295ae6d48c233df6c58efcd9874121334454519cb78efd4f2f04673aebcd55",
+        "87cee3ad48287edb0dbbffcf62e89ae553af30f168f673213d5845045140306a",
+        "c51c5dbd7ccc3d8d43c413767bf173dd28e83d1430bf2c392b147f749335b2ae",
+        "432cc29c3900def54a17e9de7a0a48ebd3b4c1715a5607cd1c4efa2961b5dcb3",
+        "e010cb223cf348213aa11bb6fcb04f17765a495839c3bd58d61e39d324a182a5",
+        "ff118eb2e3c96e39a7707ecf596b2e18ab86b65d18ff3ae069ed5136be88edea",
+        "ab2b00853be44ff19b2c4b09f8300fc75fc3415bd7d1121ca9847fa9d841e860",
+        "b5dced9ea6f595e3f7f8a0f96f56c69b24366ad6348e0290cd0cf80bc8e44e32",
+        "6fe7c7bb755ed0538b76a97afa13849ad1306b9b9846b437cfbbb7eb8c14dc2b",
+        "141753ebebb4ab9cffed320ec4f4a1b8e8ed8c7ca8207c304bd9102ef2c955dd"
+      ],
+      "relevant_ids": [
+        "b2417b9fa8e7895b40cf02a0802e7ee58eebbd9465f7ddc06a157c2fd03ac708",
+        "0127df3612c086173981611283f34692e94ffb10c618c3cf28b64c6fc5cd4d56",
+        "66295ae6d48c233df6c58efcd9874121334454519cb78efd4f2f04673aebcd55"
+      ]
+    },
+    {
+      "id": "rag_004",
+      "difficulty": "easy",
+      "type": "factual",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "e97fda718094b9c3d7d91b5e9634fe652862309b486aa27595ae201d9a61410a",
+        "b5dced9ea6f595e3f7f8a0f96f56c69b24366ad6348e0290cd0cf80bc8e44e32",
+        "650a217823c6e7c0e6accdc6c0ce916a79a4e3ca5fcbab268b167eb08559bef0",
+        "e8153e5e4342e59bbc13110feb33cbda5d2529a0326d03b146a6ce15df597d71",
+        "a539b59719b613addf828bc60d8a4ca4d7546253210552a13b7465ffa4da7edc",
+        "ade38c1e32e3e587b6a34d94f74c5f1f79075f8aabfaf2218e436003f5099c68",
+        "87dd76b4886608217e1e13047a039d301b9827d546edaa5fb4616f075c5620fb",
+        "0127df3612c086173981611283f34692e94ffb10c618c3cf28b64c6fc5cd4d56",
+        "ec3d684db1cf1c6b376249ec77dfe1629016ab9bc56fe6d478f139136e10a1e6",
+        "4e85023a110ed55c8d35f2018e9b4fc253fdedda055e4d16a9e930320155a60b",
+        "cdbdf06652ede31e89623035eab2af6b1747d534ca57a50cb490a7155c93e3c8",
+        "d35abf40fc21566287dbe476ee08f088d21b82bb05c1ba5334a10c0ecea14fc4"
+      ],
+      "relevant_ids": [
+        "e97fda718094b9c3d7d91b5e9634fe652862309b486aa27595ae201d9a61410a",
+        "b5dced9ea6f595e3f7f8a0f96f56c69b24366ad6348e0290cd0cf80bc8e44e32",
+        "650a217823c6e7c0e6accdc6c0ce916a79a4e3ca5fcbab268b167eb08559bef0"
+      ]
+    },
+    {
+      "id": "rag_005",
+      "difficulty": "medium",
+      "type": "factual",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "9cd04489e23e789bd42d1b06e47317f050a56f6fdd444190196c191b0f4ba69c",
+        "4e85023a110ed55c8d35f2018e9b4fc253fdedda055e4d16a9e930320155a60b",
+        "dff3a94c93c0071b7788b5260e97648fb1a4590bd41354b83817a137e7c9b486",
+        "56cc42aa08cb0742f887b7b5f169129b5fce0aecf754b1884555aa3d23e49926",
+        "8b54041d86fe10c6612cc5f99da8152ab2cc2868b97a02624562b5208c452326",
+        "6825cf3dcb9d754d2a05a63e2dbe0eb0b3f23e14bfff9b64d8b414c880c4a5a6",
+        "b4a737d7f98e37ce01f9f792b8ec5207a6b14fa388b4885fb1b4a9081dba7e02",
+        "a9fe24337fef39929de743818c649d6342a2ef5a34cbb534d91f069ef1ebc797",
+        "3526e49b36ec68f5fd34b613cbdfbb380fcf480d40412305b6810770a9c79ce3",
+        "05f93e5cbe02b0df21a5e416bf21690afa79ff046811f7c2553da93d10c027ba",
+        "8facd0ebe34faafd766a1e4fb10f97de35ed3ea2575caa6ebec8fffc1471e0be",
+        "e8153e5e4342e59bbc13110feb33cbda5d2529a0326d03b146a6ce15df597d71"
+      ],
+      "relevant_ids": [
+        "9cd04489e23e789bd42d1b06e47317f050a56f6fdd444190196c191b0f4ba69c",
+        "4e85023a110ed55c8d35f2018e9b4fc253fdedda055e4d16a9e930320155a60b",
+        "dff3a94c93c0071b7788b5260e97648fb1a4590bd41354b83817a137e7c9b486"
+      ]
+    },
+    {
+      "id": "rag_006",
+      "difficulty": "medium",
+      "type": "factual",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "6db9544a72bf17f82ac7f75cb5d207cef8f4a94fbc3e13159e4a28ab38afbbd2",
+        "87cee3ad48287edb0dbbffcf62e89ae553af30f168f673213d5845045140306a",
+        "a0e5b36807831ca2f82c00dc55389ce5e579957a974b7af76ee3dd4c90dde872",
+        "432cc29c3900def54a17e9de7a0a48ebd3b4c1715a5607cd1c4efa2961b5dcb3",
+        "c1a7df0ac73aac727694c18f891b1b80b6cf615982a491fdda9f2fd80f42f52b",
+        "aeb83e1dd00d488b23f130c916f670540e833cceb0af5cd30b5ece09868d4a77",
+        "65fceaeae34119946f01c51b6b717badd57f2bcef6e261e313b5f4103325cdf5",
+        "47d39adbd9973b14a8823fca1868eea85d917eb762da02f51d4c89f3e4c43d61",
+        "73ba6791d438689d486df513055008a9b8171843e627eee0819acd52de1deec1",
+        "b5dced9ea6f595e3f7f8a0f96f56c69b24366ad6348e0290cd0cf80bc8e44e32",
+        "28283a8587b707c5be3b47c98f5fe58891b5245f4f57d6a7b245c09cf92da5e6",
+        "0306ba76d653e63fb9e52b596087427153cec238c98bd104aa909d1f4dd50eeb"
+      ],
+      "relevant_ids": [
+        "6db9544a72bf17f82ac7f75cb5d207cef8f4a94fbc3e13159e4a28ab38afbbd2",
+        "87cee3ad48287edb0dbbffcf62e89ae553af30f168f673213d5845045140306a",
+        "a0e5b36807831ca2f82c00dc55389ce5e579957a974b7af76ee3dd4c90dde872"
+      ]
+    },
+    {
+      "id": "rag_007",
+      "difficulty": "hard",
+      "type": "factual",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "7eda11273142cfcec15e8bf835f95bda45e6a6ed36b2b3e3a25260a38c1acdf5",
+        "aeb83e1dd00d488b23f130c916f670540e833cceb0af5cd30b5ece09868d4a77",
+        "4cfc888a97d193f570eb09020392eabf70ba42b00bfda04faa73c647d35c2284",
+        "d2cfc99a74f7260ea68f75465263a5bd74e3623564543cb535bcf51d7404b5f8",
+        "10c8f9fea2e5a2d36e05d971a94b75910a9055f477dfc098199170dd76787094",
+        "df27e26b17c0b706536825ce1bc4cb49bdb05834212f5d38820b5756fe112bba",
+        "256aaacac3cc555892cf0200d7b53f15e9328cfde52376b9773fb0676d0cc954",
+        "87cee3ad48287edb0dbbffcf62e89ae553af30f168f673213d5845045140306a",
+        "7f9478abc64846041ddcdfe5ba5c72c8a1fa58380357acb1fdac94168b30b318",
+        "432cc29c3900def54a17e9de7a0a48ebd3b4c1715a5607cd1c4efa2961b5dcb3",
+        "b5d9fa08c9d7e449d960424029f09aa1bf775eec92a806fc4f370f1405900c89",
+        "b5dced9ea6f595e3f7f8a0f96f56c69b24366ad6348e0290cd0cf80bc8e44e32"
+      ],
+      "relevant_ids": [
+        "7eda11273142cfcec15e8bf835f95bda45e6a6ed36b2b3e3a25260a38c1acdf5",
+        "aeb83e1dd00d488b23f130c916f670540e833cceb0af5cd30b5ece09868d4a77",
+        "4cfc888a97d193f570eb09020392eabf70ba42b00bfda04faa73c647d35c2284"
+      ]
+    },
+    {
+      "id": "rag_008",
+      "difficulty": "hard",
+      "type": "factual",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "604ef386aee645c6f43be57b217a29c81088734b3020c54cf973f9213789dd10",
+        "62959d08d9eef2a947b1ed56a4de9b8fa3ed8dc94fe1c306a3aced790d33383e",
+        "5f6ccdbc5087e990b4223af023bad876660ff6aa652bc6fe16b4843b156fcb7e",
+        "a539b59719b613addf828bc60d8a4ca4d7546253210552a13b7465ffa4da7edc",
+        "ba0fbbba3abff1966805de0c3709e628e80f33bd3e57fadf9b2df3253c96d11e",
+        "76ebd4f4b087bfd65d1b84f6c6f302d998ad7e7961a8a6f0aa1bca1a3af9a576",
+        "c02c72069bf42c8f350ea624f6130b6351df35ef394bd9f45c24f31da7c02deb",
+        "f91a71a1b680598238c02142d7faa89c19dac967dbd0e4b911b731b57962c9d4",
+        "fbc372a4a69a1e4877e2f112afa1e0cb3d8256103a04436c0ea0a78f0325eab1",
+        "d0c8be56b339d1a566aad96ceeaad40f0ac4fb6e98b3804043af5285db47d0f4",
+        "f13ac77e34404e32543646d0ae83fdd893e23cdbae46afe3670fd27ef5c280b6",
+        "60cd51a8dbca7f5442d158ee68c4b2cae123a2c4a200ce224fa643630ff01c60"
+      ],
+      "relevant_ids": [
+        "604ef386aee645c6f43be57b217a29c81088734b3020c54cf973f9213789dd10",
+        "62959d08d9eef2a947b1ed56a4de9b8fa3ed8dc94fe1c306a3aced790d33383e",
+        "5f6ccdbc5087e990b4223af023bad876660ff6aa652bc6fe16b4843b156fcb7e"
+      ]
+    },
+    {
+      "id": "rag_009",
+      "difficulty": "easy",
+      "type": "procedural",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "664a09edb693a8652a616a4a2333b53812f1d81b70cebea2a42af9915078ed45",
+        "b53a8b4f83cc2926ce8c03212c00076db21c04a71338e2054ca38784d93eff80",
+        "f12e803eb23f74fbd9e4dc1066cbabc14697ad1919450c932957b5f3beedb25e",
+        "14d322d2c3fe464b8aefc9edcadacff029e273367a87a73061b08ea996c50f30",
+        "5981fafa6c1ed3afa31d85e0b098a12c9cc0f3c8f09ebb17efc9227b14836961",
+        "e00874714271ef4eb4dd744243565fd46437547cfe18a796c49dfcc718cfa2b6",
+        "5f91331de0ff4c127a2c9276dd3fe8e2285ecbb830eaa0b44394373f5f640883",
+        "6825cf3dcb9d754d2a05a63e2dbe0eb0b3f23e14bfff9b64d8b414c880c4a5a6",
+        "9c097bc8994246618b17151fbd004cedb16865100f9e19ac28d7a7ca16a4ddf1",
+        "6ff76efe67e5f9d21f0c1b00a45c1a1fe2d3e47e26e399e6b8914f3a19b146f3",
+        "eacf281cd5760fb8217f4e4dba08cfdd7e52dd44037a8a9adb4779ed318e0172",
+        "0d01f668bfaad20f6859d386c3219e463340df509f5f610f91c95a116a6d605f"
+      ],
+      "relevant_ids": [
+        "664a09edb693a8652a616a4a2333b53812f1d81b70cebea2a42af9915078ed45",
+        "b53a8b4f83cc2926ce8c03212c00076db21c04a71338e2054ca38784d93eff80",
+        "f12e803eb23f74fbd9e4dc1066cbabc14697ad1919450c932957b5f3beedb25e"
+      ]
+    },
+    {
+      "id": "rag_010",
+      "difficulty": "easy",
+      "type": "procedural",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "c93b22ca81b973e47d786608b0e8bf09700e0de2ccb60c0ea50f3cb83d62dd19",
+        "14d322d2c3fe464b8aefc9edcadacff029e273367a87a73061b08ea996c50f30",
+        "833ef6a697cbeac31e1148d1a8f73fcd6e53a0eeda500375762e89ae92f0ef7e",
+        "d9b85b87b6e022728a40ad56230546609d4a19bf396f1bf9116c5dfcb013481e",
+        "4f9098c59e58f1623fd47fdda7e2e31e7a06cbe0360becd4fe623d7f6bbe7117",
+        "219d424d406c9237ab4b44a4f6a02773324c56a05627a0b37c756e18bf9322b5",
+        "7c86c2f4532da5f7541b0869d3b312224f02859060bfb38a6f5a71adcaacd60b",
+        "40d045959624d75354cb4188c42007238ecca28136ec2f04a5c9c04debc88e52",
+        "c51c5dbd7ccc3d8d43c413767bf173dd28e83d1430bf2c392b147f749335b2ae",
+        "664a09edb693a8652a616a4a2333b53812f1d81b70cebea2a42af9915078ed45",
+        "48573793142c2259b902919a7d8035dd8e65123f26f0ec303e4d9865c42a13cf",
+        "fbbc07c6e2f95bbb6f50b25e7c3096dfbba5a858fa12a7728807adc4d0372222"
+      ],
+      "relevant_ids": [
+        "c93b22ca81b973e47d786608b0e8bf09700e0de2ccb60c0ea50f3cb83d62dd19",
+        "14d322d2c3fe464b8aefc9edcadacff029e273367a87a73061b08ea996c50f30",
+        "833ef6a697cbeac31e1148d1a8f73fcd6e53a0eeda500375762e89ae92f0ef7e"
+      ]
+    },
+    {
+      "id": "rag_011",
+      "difficulty": "easy",
+      "type": "procedural",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "55d474605ed4596eade19b7d03dc3f0fbc24e7c12969e613504175e4c8c705e6",
+        "14d322d2c3fe464b8aefc9edcadacff029e273367a87a73061b08ea996c50f30",
+        "3cd38e0eed8bdd3f9b857be02547642c2594f9f855321b00bc14a92ae690168b",
+        "664a09edb693a8652a616a4a2333b53812f1d81b70cebea2a42af9915078ed45",
+        "206243467ca659397e5f1fa5cecfa4a1aae663732b2ccf06ada58522a3adc705",
+        "cf06adf456e2a4b8a13dfba554837472ff09b8494dcb742f890c3a02833ec06a",
+        "c2df9abbead9baefbbc0e789fb178ee22a4a50b9b0a5a98c800c26e7f98007b2",
+        "d4e5b0fb27a32ba0207ee51ab3505f901f4e7f8860706658c2ab398e21c9ea4d",
+        "7774479f5bfc9cb4d6dba7428845cca6fbddbb6ee2cacbf761507b672539d070",
+        "0d01f668bfaad20f6859d386c3219e463340df509f5f610f91c95a116a6d605f",
+        "0c7099b1e8960e750301e0277d7e82acdf403ce143d15daf23e3be0577503eda",
+        "94b8e8c97d4e855496baaead5a2e561474eaa46f5dc18f52ccf914188a5b2969"
+      ],
+      "relevant_ids": [
+        "55d474605ed4596eade19b7d03dc3f0fbc24e7c12969e613504175e4c8c705e6",
+        "14d322d2c3fe464b8aefc9edcadacff029e273367a87a73061b08ea996c50f30",
+        "3cd38e0eed8bdd3f9b857be02547642c2594f9f855321b00bc14a92ae690168b"
+      ]
+    },
+    {
+      "id": "rag_012",
+      "difficulty": "medium",
+      "type": "procedural",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "f95a1c7312e6cb276df61c02d55b5d8f7462cff4ab1c07711ad02f735de638a0",
+        "664a09edb693a8652a616a4a2333b53812f1d81b70cebea2a42af9915078ed45",
+        "6ce081e26c57590464effbc6477f3a0fe609d4d9073c034d877253127aac8f12",
+        "192282979f8ef436d9fd41ad555898349f297371ee18859cd19504d918608724",
+        "677172be71afbae8cc089895ef23553b8fccc4e1d675f35eac739abbf2a907ea",
+        "cf06adf456e2a4b8a13dfba554837472ff09b8494dcb742f890c3a02833ec06a",
+        "ee70fc14b71f9d65630a9bf8ed5b3bb78a65e414b86a4d9013116f94813ddc0b",
+        "c24cab20fd8043a12e1d41495f62a0bffd9d9a4eb17357f5867963da247984b9",
+        "fe2028c60abc99b8be723a86cef2ebd224fa47ed4cc65eda3749826a51ba97ab",
+        "c60b6bab0259b735cd97d2042d5e6dcfbcf9241cfbe50dc6182a1ff00ee43f92",
+        "f99fbdd9d0f548f1fe4cf812a2ff9350dab8d1e35bae0b2009e49cf33c449378",
+        "2561c1db7ca87eb68272d65c60be61ac15ee8296deb167616b14b78624ee447e"
+      ],
+      "relevant_ids": [
+        "f95a1c7312e6cb276df61c02d55b5d8f7462cff4ab1c07711ad02f735de638a0",
+        "664a09edb693a8652a616a4a2333b53812f1d81b70cebea2a42af9915078ed45",
+        "6ce081e26c57590464effbc6477f3a0fe609d4d9073c034d877253127aac8f12"
+      ]
+    },
+    {
+      "id": "rag_013",
+      "difficulty": "medium",
+      "type": "procedural",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "4f9098c59e58f1623fd47fdda7e2e31e7a06cbe0360becd4fe623d7f6bbe7117",
+        "a6d1f282970e296c67ff2cb8c6cd2027e959f0d35f5b221dc5f499587193f37e",
+        "0306ba76d653e63fb9e52b596087427153cec238c98bd104aa909d1f4dd50eeb",
+        "6825cf3dcb9d754d2a05a63e2dbe0eb0b3f23e14bfff9b64d8b414c880c4a5a6",
+        "3a26058461605a1ae9047d2d1e6e78945bb5961434850752b539e23c498bad10",
+        "55e797be03ae18d759c34364b1936f71f445972119e8562f5b53287522ce1f71",
+        "4cd13371a4a8d6e75439c193a2dfe5a12c6092ae5bf116e9f79c9a2c30053905",
+        "b53a8b4f83cc2926ce8c03212c00076db21c04a71338e2054ca38784d93eff80",
+        "cf26cf56ad706eb6fe01717bad168e2fbe8f678edce379df2eba01201654c1a0",
+        "992dcbb68a0ae30feb17a2c7bf39d13c947097037fbf3d96e1250ba71cc86d9d",
+        "ace83b360109dd436a838be8fbe1d4523a3c5932db94da8100a3fcc7d019f403",
+        "fbbc07c6e2f95bbb6f50b25e7c3096dfbba5a858fa12a7728807adc4d0372222"
+      ],
+      "relevant_ids": [
+        "4f9098c59e58f1623fd47fdda7e2e31e7a06cbe0360becd4fe623d7f6bbe7117",
+        "a6d1f282970e296c67ff2cb8c6cd2027e959f0d35f5b221dc5f499587193f37e",
+        "0306ba76d653e63fb9e52b596087427153cec238c98bd104aa909d1f4dd50eeb"
+      ]
+    },
+    {
+      "id": "rag_014",
+      "difficulty": "medium",
+      "type": "procedural",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "3b7e80ece8451a6ac97d98628e1bc674082b4c5ab6afb66295971f64419774af",
+        "ef8599ed55594cecc007480ada67694640bc5c7bb7c47498ab0d206c503f5370",
+        "cf0268593a7ac8be966dd297d668a7349aaa26232172b499cfc0da66798a637b",
+        "9352218d2ffba5140e5be7686ad0a7d6b804e320de18b4df257a5ce0d993b1b3",
+        "f24c69c91c5b21b182e6987bf0727ebb984f8cfb4263baa6fe41644f778f9ed5",
+        "14d322d2c3fe464b8aefc9edcadacff029e273367a87a73061b08ea996c50f30",
+        "f23a3ccd25f7aa6ea45afe6cac9be48ac280300e821807dcf0b79d05c8af6978",
+        "d4e5b0fb27a32ba0207ee51ab3505f901f4e7f8860706658c2ab398e21c9ea4d",
+        "98419c1825d73470e57acb75757804cb032ec924482b4ff36675198cf7743514",
+        "c24cab20fd8043a12e1d41495f62a0bffd9d9a4eb17357f5867963da247984b9",
+        "935c87c7ae74504818148ef005dd7bab266e9b8de0cce579783b74f943def0b7",
+        "a503800805b0dbbfb4848bf91fc9da17572bcab8cf16ac6b458dd323741097b8"
+      ],
+      "relevant_ids": [
+        "3b7e80ece8451a6ac97d98628e1bc674082b4c5ab6afb66295971f64419774af",
+        "ef8599ed55594cecc007480ada67694640bc5c7bb7c47498ab0d206c503f5370",
+        "cf0268593a7ac8be966dd297d668a7349aaa26232172b499cfc0da66798a637b"
+      ]
+    },
+    {
+      "id": "rag_015",
+      "difficulty": "medium",
+      "type": "procedural",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "14d322d2c3fe464b8aefc9edcadacff029e273367a87a73061b08ea996c50f30",
+        "80abc49fb21da97b057e393d5dd82c0abca06dbc2f8a56f059655b2842520fa4",
+        "3b7e80ece8451a6ac97d98628e1bc674082b4c5ab6afb66295971f64419774af",
+        "41f6522e7d362018466919c4f69f3f20b687e1d4ca15299431d59ed5440cd5df",
+        "55e797be03ae18d759c34364b1936f71f445972119e8562f5b53287522ce1f71",
+        "ac5a5e413d3de654cea09f42a7fd7bca70ad485aabf64e3c137621ec9fb6e5b3",
+        "a8fc26fde6d9eb22b375382261049ed4b3b7cfb5c0851660bbfc2f4a83731776",
+        "427447dd5c5020f2770e1b68f8b74b126fa062be1afffead4fb1b6835be9fb79",
+        "95ab85b7f004808d7ce3acbb83acb97569bdfeb1c77eca85732c43ff03ed0c37",
+        "ba5887f18eeea31cbfbbe6a3f94461d50e5755065e8f95f5d1cff765eee9ac29",
+        "6ae63e337291f86708815e33d2430e6f5af7f08ba07646a051a44501553f6292",
+        "d4e5b0fb27a32ba0207ee51ab3505f901f4e7f8860706658c2ab398e21c9ea4d"
+      ],
+      "relevant_ids": [
+        "14d322d2c3fe464b8aefc9edcadacff029e273367a87a73061b08ea996c50f30",
+        "80abc49fb21da97b057e393d5dd82c0abca06dbc2f8a56f059655b2842520fa4",
+        "3b7e80ece8451a6ac97d98628e1bc674082b4c5ab6afb66295971f64419774af"
+      ]
+    },
+    {
+      "id": "rag_016",
+      "difficulty": "hard",
+      "type": "procedural",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "7774479f5bfc9cb4d6dba7428845cca6fbddbb6ee2cacbf761507b672539d070",
+        "14d322d2c3fe464b8aefc9edcadacff029e273367a87a73061b08ea996c50f30",
+        "9786f63ccd203240cfd5b5ca1787e49999088554556fb24a8a29e1b899346c46",
+        "d4e5b0fb27a32ba0207ee51ab3505f901f4e7f8860706658c2ab398e21c9ea4d",
+        "ade38c1e32e3e587b6a34d94f74c5f1f79075f8aabfaf2218e436003f5099c68",
+        "4ebe85167e56af023cbfb8ff8b2664bdb5cbe704675a216164a94ca045aeca0d",
+        "84ff64b656e2d00bd80fc0d36d5183389290517b37d2cad277ebf710d13a0cb6",
+        "6825cf3dcb9d754d2a05a63e2dbe0eb0b3f23e14bfff9b64d8b414c880c4a5a6",
+        "5dd3d51670738ae50d3cdf6d98efd4641d6963bfc62c7a0969ba11f635ed76fa",
+        "83e7b6dc8cd7ef1c4938928433fba56b51986d0c920a54a3be723f03ec806db7",
+        "141753ebebb4ab9cffed320ec4f4a1b8e8ed8c7ca8207c304bd9102ef2c955dd",
+        "965365e05469be7ddc31bdd812520e03edce6de800b2b76684765a55fba5bcb5"
+      ],
+      "relevant_ids": [
+        "7774479f5bfc9cb4d6dba7428845cca6fbddbb6ee2cacbf761507b672539d070",
+        "14d322d2c3fe464b8aefc9edcadacff029e273367a87a73061b08ea996c50f30",
+        "9786f63ccd203240cfd5b5ca1787e49999088554556fb24a8a29e1b899346c46"
+      ]
+    },
+    {
+      "id": "rag_017",
+      "difficulty": "hard",
+      "type": "procedural",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "6521460febb30a98e896f553b23e56ea778be19e122a1bfaefb4cac6ac0a8d12",
+        "55e797be03ae18d759c34364b1936f71f445972119e8562f5b53287522ce1f71",
+        "0bd07e59e80b8470103bd6d10bc928ae25037609a967f114d16233d34b18c004",
+        "a6d1f282970e296c67ff2cb8c6cd2027e959f0d35f5b221dc5f499587193f37e",
+        "6a906044b32df4ddd08bcc4d4d9e45772ea61446303eebba007896c9298235e3",
+        "a8fc26fde6d9eb22b375382261049ed4b3b7cfb5c0851660bbfc2f4a83731776",
+        "66295ae6d48c233df6c58efcd9874121334454519cb78efd4f2f04673aebcd55",
+        "992dcbb68a0ae30feb17a2c7bf39d13c947097037fbf3d96e1250ba71cc86d9d",
+        "3a26058461605a1ae9047d2d1e6e78945bb5961434850752b539e23c498bad10",
+        "e97fda718094b9c3d7d91b5e9634fe652862309b486aa27595ae201d9a61410a",
+        "8b54261e5eb8ef8d0426fd0122856273a83f31c48dcffb298c4f4c9619780823",
+        "8e48aba243fef007a6f54db6102310948d9126ebe6c43edf0a0bc95963d4573e"
+      ],
+      "relevant_ids": [
+        "6521460febb30a98e896f553b23e56ea778be19e122a1bfaefb4cac6ac0a8d12",
+        "55e797be03ae18d759c34364b1936f71f445972119e8562f5b53287522ce1f71",
+        "0bd07e59e80b8470103bd6d10bc928ae25037609a967f114d16233d34b18c004"
+      ]
+    },
+    {
+      "id": "rag_018",
+      "difficulty": "easy",
+      "type": "comparative",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "310ee82bb3c905375a10bdd7caa07228a5c7c7136416e45e75803c3da3bc8069",
+        "4e85023a110ed55c8d35f2018e9b4fc253fdedda055e4d16a9e930320155a60b",
+        "50dd72b64dfc279d2374ac0be72c57cded70f9a795650380a7fd20e905983ceb",
+        "87cee3ad48287edb0dbbffcf62e89ae553af30f168f673213d5845045140306a",
+        "a2e64bd6ff86626605ffde3477ce8a598131a50e2f601d474d0cd037bdb6e3f4",
+        "432cc29c3900def54a17e9de7a0a48ebd3b4c1715a5607cd1c4efa2961b5dcb3",
+        "c60b6bab0259b735cd97d2042d5e6dcfbcf9241cfbe50dc6182a1ff00ee43f92",
+        "098c485c71fd764df2082224cd898d028a74100f4f2ac4013c6b0d3b9798fe3f",
+        "4ebe85167e56af023cbfb8ff8b2664bdb5cbe704675a216164a94ca045aeca0d",
+        "f483eff2cfb2c26202378d6af6c03f7615d3f486fb5ddf156e5d4a8c446b07bc",
+        "5760ddfae1e56320626c2219e0857654a837efcf7da00e28b2d4ce8f1df2203b",
+        "0306ba76d653e63fb9e52b596087427153cec238c98bd104aa909d1f4dd50eeb"
+      ],
+      "relevant_ids": [
+        "310ee82bb3c905375a10bdd7caa07228a5c7c7136416e45e75803c3da3bc8069",
+        "4e85023a110ed55c8d35f2018e9b4fc253fdedda055e4d16a9e930320155a60b",
+        "50dd72b64dfc279d2374ac0be72c57cded70f9a795650380a7fd20e905983ceb"
+      ]
+    },
+    {
+      "id": "rag_019",
+      "difficulty": "medium",
+      "type": "comparative",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "6521460febb30a98e896f553b23e56ea778be19e122a1bfaefb4cac6ac0a8d12",
+        "84e8f5bfaf882da4b43c086b7aa0705bf7a368ac2f7f015a0e29a6b5af9dce61",
+        "4e85023a110ed55c8d35f2018e9b4fc253fdedda055e4d16a9e930320155a60b",
+        "a661fd71682d515ef55c57d251d939a37e975f162662b0dc1f9342e1dc388fcd",
+        "b5dced9ea6f595e3f7f8a0f96f56c69b24366ad6348e0290cd0cf80bc8e44e32",
+        "e125a25b13990a3af7d2db192ba1f17c163ff79ec83f39b4e706389c6f739e3d",
+        "9833c1ec42b97f9257fe38de781dd574398fcf15b7f9a7a4ffb6dd3429d4884c",
+        "af0e7035162fa8f32a54f0a0002dbccc0b8d4a5d5539e08cff451af7001af805",
+        "6fe7c7bb755ed0538b76a97afa13849ad1306b9b9846b437cfbbb7eb8c14dc2b",
+        "56cc42aa08cb0742f887b7b5f169129b5fce0aecf754b1884555aa3d23e49926",
+        "d1948302094cf4229a7ac172d8ded25d791207f593a5330e7d5c91e63c3aba45",
+        "560f43866304c43306137ecf3c94afdbd66e642456da37da5df1a0188d366a3c"
+      ],
+      "relevant_ids": [
+        "6521460febb30a98e896f553b23e56ea778be19e122a1bfaefb4cac6ac0a8d12",
+        "84e8f5bfaf882da4b43c086b7aa0705bf7a368ac2f7f015a0e29a6b5af9dce61",
+        "4e85023a110ed55c8d35f2018e9b4fc253fdedda055e4d16a9e930320155a60b"
+      ]
+    },
+    {
+      "id": "rag_020",
+      "difficulty": "medium",
+      "type": "comparative",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "1da29dddc56a7379d3787f652e019264eae2fbda0591c26694448c101886d7f9",
+        "d4e5b0fb27a32ba0207ee51ab3505f901f4e7f8860706658c2ab398e21c9ea4d",
+        "d69d31bbaa077f24550ebcff7d483b0603386b040b1a94bd719863e2141b7ba2",
+        "2f04a61a10f4feaffb358016973d75e82d1f11fd3325f0eae02caf00a1daaa42",
+        "fed737d1743b8281d40db4ef93b206d0f8d7399c0f1778c4478599eaadeb8bc7",
+        "b5dced9ea6f595e3f7f8a0f96f56c69b24366ad6348e0290cd0cf80bc8e44e32",
+        "9ddd95dfbf347829c2dbb728af347acb5c5991d187299bb6f6e38699ceb1f664",
+        "e00874714271ef4eb4dd744243565fd46437547cfe18a796c49dfcc718cfa2b6",
+        "7774479f5bfc9cb4d6dba7428845cca6fbddbb6ee2cacbf761507b672539d070",
+        "6521460febb30a98e896f553b23e56ea778be19e122a1bfaefb4cac6ac0a8d12",
+        "d422243269132c1a88c78ff9c25400a11c699206c3c24010d418aae3902c4f85",
+        "910226ef72b66d07c16abf4fd6c4970853385ef4c0c768c3d73e29bcdb4c6c7e"
+      ],
+      "relevant_ids": [
+        "1da29dddc56a7379d3787f652e019264eae2fbda0591c26694448c101886d7f9",
+        "d4e5b0fb27a32ba0207ee51ab3505f901f4e7f8860706658c2ab398e21c9ea4d",
+        "d69d31bbaa077f24550ebcff7d483b0603386b040b1a94bd719863e2141b7ba2"
+      ]
+    },
+    {
+      "id": "rag_021",
+      "difficulty": "hard",
+      "type": "comparative",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "fb87981d627a46e3cdb6be0d5e1bf8cb3b2d1f69c3cf99cc6e6e8de74007abd9",
+        "4e4b825200b1fa86b88910a0dd15ed6c22f1066bac84a6a0baf4f1dcef2926a3",
+        "a1c085b44dd3bb4c5b4890cb109f3ce13471b8c37e78c15589ba5f1866c65109",
+        "e8153e5e4342e59bbc13110feb33cbda5d2529a0326d03b146a6ce15df597d71",
+        "c84ae13a895cb41e4b9be2f0db5a3c10663619c516e9cd503ebbbfc91e1877c9",
+        "ade38c1e32e3e587b6a34d94f74c5f1f79075f8aabfaf2218e436003f5099c68",
+        "e4c1df74c970fdf87dc4b343eea02340bb870e10e419ae653694b2df9d4a3e16",
+        "63255d10f0d93c4e4c9bef21e5977cb10add054fb9ae949b18a3fd644e5a07c4",
+        "889c2873d2e7295897b62ba600dc77468c0b8008340633f3a7de0f547677d3c1",
+        "4e85023a110ed55c8d35f2018e9b4fc253fdedda055e4d16a9e930320155a60b",
+        "2a90bde5d7be2f8b9467d691333c80156b8d1f33bd573a643e3d2232ce6cb85b",
+        "71eff5187ea44143a853fc1ffa9a57eb71846c16d452bdefefe1f641cd8d82a9"
+      ],
+      "relevant_ids": [
+        "fb87981d627a46e3cdb6be0d5e1bf8cb3b2d1f69c3cf99cc6e6e8de74007abd9",
+        "4e4b825200b1fa86b88910a0dd15ed6c22f1066bac84a6a0baf4f1dcef2926a3",
+        "a1c085b44dd3bb4c5b4890cb109f3ce13471b8c37e78c15589ba5f1866c65109"
+      ]
+    },
+    {
+      "id": "rag_022",
+      "difficulty": "hard",
+      "type": "comparative",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "87dd76b4886608217e1e13047a039d301b9827d546edaa5fb4616f075c5620fb",
+        "d4e5b0fb27a32ba0207ee51ab3505f901f4e7f8860706658c2ab398e21c9ea4d",
+        "f484dc0e158920aec0bd7649903a4adca40c60c68f78934401e985d2cab6616e",
+        "cf06adf456e2a4b8a13dfba554837472ff09b8494dcb742f890c3a02833ec06a",
+        "daed1ef4a0416ae3df661c85d1e27f6d827a4e4f0f09f6684870aec6dfeb91e5",
+        "b5dced9ea6f595e3f7f8a0f96f56c69b24366ad6348e0290cd0cf80bc8e44e32",
+        "94b8e8c97d4e855496baaead5a2e561474eaa46f5dc18f52ccf914188a5b2969",
+        "d9b85b87b6e022728a40ad56230546609d4a19bf396f1bf9116c5dfcb013481e",
+        "f7169d306aaaf48083d551a89027f86a4bbc6bd2696afbce480a429711d3ee3b",
+        "0e2976d589bd94fc2b8d0b6b1902146e19adad057c6526574642f652088bb35b",
+        "83450f9b916316b7550c49165e32dfcc82e17f82accde4d6930e9a3ae92384d2",
+        "aeb83e1dd00d488b23f130c916f670540e833cceb0af5cd30b5ece09868d4a77"
+      ],
+      "relevant_ids": [
+        "87dd76b4886608217e1e13047a039d301b9827d546edaa5fb4616f075c5620fb",
+        "d4e5b0fb27a32ba0207ee51ab3505f901f4e7f8860706658c2ab398e21c9ea4d",
+        "f484dc0e158920aec0bd7649903a4adca40c60c68f78934401e985d2cab6616e"
+      ]
+    },
+    {
+      "id": "rag_023",
+      "difficulty": "easy",
+      "type": "troubleshooting",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "65fceaeae34119946f01c51b6b717badd57f2bcef6e261e313b5f4103325cdf5",
+        "0127df3612c086173981611283f34692e94ffb10c618c3cf28b64c6fc5cd4d56",
+        "84e8f5bfaf882da4b43c086b7aa0705bf7a368ac2f7f015a0e29a6b5af9dce61",
+        "67c07b1bcf6503c9cd80b2cf8f73ae04662af351524fccaf9ba8df8d62545f90",
+        "d1c50e9f5a0e63afcd6f29bbfec6f0c0fcc8ea979271d3a280d5c81b12d5056c",
+        "b5dced9ea6f595e3f7f8a0f96f56c69b24366ad6348e0290cd0cf80bc8e44e32",
+        "9c1d0f3c03fe30757cdd42de67ce34c3030ade0c2d9c4816beef2bafb8e1e001",
+        "a6d1f282970e296c67ff2cb8c6cd2027e959f0d35f5b221dc5f499587193f37e",
+        "d20cf9db705c0147dc559bc41c661a017a0979969e1816222325f43e5ae1622a",
+        "6726a9cf11b6ff35135e1477cae09e7984fdca9865eb8e606498a20ff999edae",
+        "6fe7c7bb755ed0538b76a97afa13849ad1306b9b9846b437cfbbb7eb8c14dc2b",
+        "2561c1db7ca87eb68272d65c60be61ac15ee8296deb167616b14b78624ee447e"
+      ],
+      "relevant_ids": [
+        "65fceaeae34119946f01c51b6b717badd57f2bcef6e261e313b5f4103325cdf5",
+        "0127df3612c086173981611283f34692e94ffb10c618c3cf28b64c6fc5cd4d56",
+        "84e8f5bfaf882da4b43c086b7aa0705bf7a368ac2f7f015a0e29a6b5af9dce61"
+      ]
+    },
+    {
+      "id": "rag_024",
+      "difficulty": "medium",
+      "type": "troubleshooting",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "604ef386aee645c6f43be57b217a29c81088734b3020c54cf973f9213789dd10",
+        "664a09edb693a8652a616a4a2333b53812f1d81b70cebea2a42af9915078ed45",
+        "e00874714271ef4eb4dd744243565fd46437547cfe18a796c49dfcc718cfa2b6",
+        "14d322d2c3fe464b8aefc9edcadacff029e273367a87a73061b08ea996c50f30",
+        "61610e64b43f23eec05273d9824439db3a56df13a194ba6f18b222a2d2b68145",
+        "d4e5b0fb27a32ba0207ee51ab3505f901f4e7f8860706658c2ab398e21c9ea4d",
+        "310ee82bb3c905375a10bdd7caa07228a5c7c7136416e45e75803c3da3bc8069",
+        "a6d1f282970e296c67ff2cb8c6cd2027e959f0d35f5b221dc5f499587193f37e",
+        "fc61cab7d638a546646355208b7ea7de3e2c5b770c51da287aad1e6ac9917551",
+        "67c07b1bcf6503c9cd80b2cf8f73ae04662af351524fccaf9ba8df8d62545f90",
+        "c2df9abbead9baefbbc0e789fb178ee22a4a50b9b0a5a98c800c26e7f98007b2",
+        "10c8f9fea2e5a2d36e05d971a94b75910a9055f477dfc098199170dd76787094"
+      ],
+      "relevant_ids": [
+        "604ef386aee645c6f43be57b217a29c81088734b3020c54cf973f9213789dd10",
+        "664a09edb693a8652a616a4a2333b53812f1d81b70cebea2a42af9915078ed45",
+        "e00874714271ef4eb4dd744243565fd46437547cfe18a796c49dfcc718cfa2b6"
+      ]
+    },
+    {
+      "id": "rag_025",
+      "difficulty": "hard",
+      "type": "troubleshooting",
+      "p5": 0.6,
+      "r5": 1.0,
+      "retrieved_ids": [
+        "01087ba428c81a4dafab15c49ddbb936554b43a8d522418f99ab9ff9023ade1c",
+        "664a09edb693a8652a616a4a2333b53812f1d81b70cebea2a42af9915078ed45",
+        "31aa6f1898661b3095d3da55131adb3cefb5883b40f932bfa80ffe640249f7b1",
+        "6ff76efe67e5f9d21f0c1b00a45c1a1fe2d3e47e26e399e6b8914f3a19b146f3",
+        "ab6b23ce400088fa814bf9bc70c47764d0ed05dbf3889388a0ff7bc928342338",
+        "14d322d2c3fe464b8aefc9edcadacff029e273367a87a73061b08ea996c50f30",
+        "1311f81956dee8bda23cc3e183e652e90a817c3993072b2dca16e6c844840c80",
+        "b53a8b4f83cc2926ce8c03212c00076db21c04a71338e2054ca38784d93eff80",
+        "01ced5c360467b0bd06affe95a110c3a0ae9a1af37b0da59cae368959d9d5340",
+        "cf06adf456e2a4b8a13dfba554837472ff09b8494dcb742f890c3a02833ec06a",
+        "a0e5b36807831ca2f82c00dc55389ce5e579957a974b7af76ee3dd4c90dde872",
+        "fbbc07c6e2f95bbb6f50b25e7c3096dfbba5a858fa12a7728807adc4d0372222"
+      ],
+      "relevant_ids": [
+        "01087ba428c81a4dafab15c49ddbb936554b43a8d522418f99ab9ff9023ade1c",
+        "664a09edb693a8652a616a4a2333b53812f1d81b70cebea2a42af9915078ed45",
+        "31aa6f1898661b3095d3da55131adb3cefb5883b40f932bfa80ffe640249f7b1"
+      ]
+    }
+  ]
+}

@@ -3,9 +3,12 @@ from __future__ import annotations
 import logging
 import os
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("api-gateway")
+
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from llm_client import LlmClient, get_llm_http_client
@@ -34,6 +37,8 @@ async def lifespan(_app: FastAPI):
     logger.info("action=gateway_shutdown clients_closed")
 
 
+from eval_router import router as eval_router
+
 app = FastAPI(title="api-gateway", lifespan=lifespan)
 
 _ALLOWED_ORIGINS = [
@@ -49,6 +54,13 @@ app.add_middleware(
 
 app.include_router(session_router)
 app.include_router(websocket_router)
+app.include_router(eval_router)
+
+@app.post("/chat")
+async def chat_rest(request: Request):
+    """REST endpoint for evaluations. Implementation will follow in websocket_handler refactor."""
+    from websocket_handler import run_chat_rest
+    return await run_chat_rest(request)
 
 
 @app.get("/health")

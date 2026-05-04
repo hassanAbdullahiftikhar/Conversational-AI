@@ -1,0 +1,305 @@
+[
+  {
+    "query_id": "rag_001",
+    "query_text": "What communication protocols does Home Assistant support natively?",
+    "relevant_chunk_ids": [
+      "e00874714271ef4eb4dd744243565fd46437547cfe18a796c49dfcc718cfa2b6",
+      "f27f7a4ff6226a6296111eaa7e07fbf983847acef9eb8d7a77e51f4816e2d88b",
+      "a2cca43327e6098bd30cedac185ae529987ef7d8df2f537ecd22dfdadb4c0ba5"
+    ],
+    "ground_truth_answer": "Home Assistant natively supports several communication protocols including Zigbee, Z-Wave, MQTT, Matter, and Thread.",
+    "difficulty": "easy",
+    "type": "factual"
+  },
+  {
+    "query_id": "rag_002",
+    "query_text": "What is the default port for the Home Assistant web UI?",
+    "relevant_chunk_ids": [
+      "a3c4c03d7f731fbbaf0c1c5c717eedd1d4a8de4e0d8b933ccda3fed91383e6d7",
+      "df27e26b17c0b706536825ce1bc4cb49bdb05834212f5d38820b5756fe112bba",
+      "a8fc26fde6d9eb22b375382261049ed4b3b7cfb5c0851660bbfc2f4a83731776"
+    ],
+    "ground_truth_answer": "The default port for the Home Assistant web interface is 8123.",
+    "difficulty": "easy",
+    "type": "factual"
+  },
+  {
+    "query_id": "rag_003",
+    "query_text": "What is a Zigbee coordinator?",
+    "relevant_chunk_ids": [
+      "b2417b9fa8e7895b40cf02a0802e7ee58eebbd9465f7ddc06a157c2fd03ac708",
+      "0127df3612c086173981611283f34692e94ffb10c618c3cf28b64c6fc5cd4d56",
+      "66295ae6d48c233df6c58efcd9874121334454519cb78efd4f2f04673aebcd55"
+    ],
+    "ground_truth_answer": "A Zigbee coordinator is the central node in a Zigbee network that manages network formation, security, and routing.",
+    "difficulty": "easy",
+    "type": "factual"
+  },
+  {
+    "query_id": "rag_004",
+    "query_text": "What does MQTT stand for and what is it used for in home automation?",
+    "relevant_chunk_ids": [
+      "e97fda718094b9c3d7d91b5e9634fe652862309b486aa27595ae201d9a61410a",
+      "b5dced9ea6f595e3f7f8a0f96f56c69b24366ad6348e0290cd0cf80bc8e44e32",
+      "650a217823c6e7c0e6accdc6c0ce916a79a4e3ca5fcbab268b167eb08559bef0"
+    ],
+    "ground_truth_answer": "MQTT stands for Message Queuing Telemetry Transport. It is a lightweight messaging protocol used in home automation for communication between devices and a central broker.",
+    "difficulty": "easy",
+    "type": "factual"
+  },
+  {
+    "query_id": "rag_005",
+    "query_text": "What is the difference between ZHA and deCONZ integration in Home Assistant?",
+    "relevant_chunk_ids": [
+      "9cd04489e23e789bd42d1b06e47317f050a56f6fdd444190196c191b0f4ba69c",
+      "4e85023a110ed55c8d35f2018e9b4fc253fdedda055e4d16a9e930320155a60b",
+      "dff3a94c93c0071b7788b5260e97648fb1a4590bd41354b83817a137e7c9b486"
+    ],
+    "ground_truth_answer": "ZHA is a native Home Assistant integration that communicates directly with Zigbee radios, while deCONZ is an external service (often used with Conbee sticks) that interfaces with HA via its own integration.",
+    "difficulty": "medium",
+    "type": "factual"
+  },
+  {
+    "query_id": "rag_006",
+    "query_text": "What hardware is required to use Z-Wave with Home Assistant?",
+    "relevant_chunk_ids": [
+      "6db9544a72bf17f82ac7f75cb5d207cef8f4a94fbc3e13159e4a28ab38afbbd2",
+      "87cee3ad48287edb0dbbffcf62e89ae553af30f168f673213d5845045140306a",
+      "a0e5b36807831ca2f82c00dc55389ce5e579957a974b7af76ee3dd4c90dde872"
+    ],
+    "ground_truth_answer": "To use Z-Wave, you need a compatible Z-Wave USB stick (like a Zooz or Aeotec) and the Z-Wave JS integration configured in Home Assistant.",
+    "difficulty": "medium",
+    "type": "factual"
+  },
+  {
+    "query_id": "rag_007",
+    "query_text": "What are the security implications of exposing Home Assistant to the internet via Nabu Casa?",
+    "relevant_chunk_ids": [
+      "7eda11273142cfcec15e8bf835f95bda45e6a6ed36b2b3e3a25260a38c1acdf5",
+      "aeb83e1dd00d488b23f130c916f670540e833cceb0af5cd30b5ece09868d4a77",
+      "4cfc888a97d193f570eb09020392eabf70ba42b00bfda04faa73c647d35c2284"
+    ],
+    "ground_truth_answer": "Nabu Casa provides a secure, encrypted tunnel to your local instance, mitigating the need for manual port forwarding, though any internet exposure requires strong authentication.",
+    "difficulty": "hard",
+    "type": "factual"
+  },
+  {
+    "query_id": "rag_008",
+    "query_text": "How does Home Assistant's entity registry differ from the device registry?",
+    "relevant_chunk_ids": [
+      "604ef386aee645c6f43be57b217a29c81088734b3020c54cf973f9213789dd10",
+      "62959d08d9eef2a947b1ed56a4de9b8fa3ed8dc94fe1c306a3aced790d33383e",
+      "5f6ccdbc5087e990b4223af023bad876660ff6aa652bc6fe16b4843b156fcb7e"
+    ],
+    "ground_truth_answer": "The device registry tracks physical hardware devices, while the entity registry tracks the individual sensors or controls (entities) that those devices expose to Home Assistant.",
+    "difficulty": "hard",
+    "type": "factual"
+  },
+  {
+    "query_id": "rag_009",
+    "query_text": "How do I restart Home Assistant from the UI?",
+    "relevant_chunk_ids": [
+      "664a09edb693a8652a616a4a2333b53812f1d81b70cebea2a42af9915078ed45",
+      "b53a8b4f83cc2926ce8c03212c00076db21c04a71338e2054ca38784d93eff80",
+      "f12e803eb23f74fbd9e4dc1066cbabc14697ad1919450c932957b5f3beedb25e"
+    ],
+    "ground_truth_answer": "You can restart Home Assistant by navigating to Settings > System and clicking the Restart button in the top right corner.",
+    "difficulty": "easy",
+    "type": "procedural"
+  },
+  {
+    "query_id": "rag_010",
+    "query_text": "How do I pair a Zigbee device using ZHA?",
+    "relevant_chunk_ids": [
+      "c93b22ca81b973e47d786608b0e8bf09700e0de2ccb60c0ea50f3cb83d62dd19",
+      "14d322d2c3fe464b8aefc9edcadacff029e273367a87a73061b08ea996c50f30",
+      "833ef6a697cbeac31e1148d1a8f73fcd6e53a0eeda500375762e89ae92f0ef7e"
+    ],
+    "ground_truth_answer": "To pair a device in ZHA, go to the ZHA integration, click 'Add Device', and then put your Zigbee device into pairing mode according to its manual.",
+    "difficulty": "easy",
+    "type": "procedural"
+  },
+  {
+    "query_id": "rag_011",
+    "query_text": "How do I add an integraion in Home Assistant?",
+    "relevant_chunk_ids": [
+      "55d474605ed4596eade19b7d03dc3f0fbc24e7c12969e613504175e4c8c705e6",
+      "14d322d2c3fe464b8aefc9edcadacff029e273367a87a73061b08ea996c50f30",
+      "3cd38e0eed8bdd3f9b857be02547642c2594f9f855321b00bc14a92ae690168b"
+    ],
+    "ground_truth_answer": "Integrations are added via Settings > Devices & Services > Add Integration.",
+    "difficulty": "easy",
+    "type": "procedural",
+    "has_typo": true
+  },
+  {
+    "query_id": "rag_012",
+    "query_text": "How do I create an automation that triggers at sunset?",
+    "relevant_chunk_ids": [
+      "f95a1c7312e6cb276df61c02d55b5d8f7462cff4ab1c07711ad02f735de638a0",
+      "664a09edb693a8652a616a4a2333b53812f1d81b70cebea2a42af9915078ed45",
+      "6ce081e26c57590464effbc6477f3a0fe609d4d9073c034d877253127aac8f12"
+    ],
+    "ground_truth_answer": "In the automation editor, select 'Sun' as the trigger type and choose the 'Sunset' event.",
+    "difficulty": "medium",
+    "type": "procedural"
+  },
+  {
+    "query_id": "rag_013",
+    "query_text": "How do I set up the MQTT broker add-on in Home Assistant?",
+    "relevant_chunk_ids": [
+      "4f9098c59e58f1623fd47fdda7e2e31e7a06cbe0360becd4fe623d7f6bbe7117",
+      "a6d1f282970e296c67ff2cb8c6cd2027e959f0d35f5b221dc5f499587193f37e",
+      "0306ba76d653e63fb9e52b596087427153cec238c98bd104aa909d1f4dd50eeb"
+    ],
+    "ground_truth_answer": "Install the 'Mosquitto broker' add-on from the Add-on Store, start it, and then configure the MQTT integration to connect to it.",
+    "difficulty": "medium",
+    "type": "procedural"
+  },
+  {
+    "query_id": "rag_014",
+    "query_text": "How do I create a Lovelace dashboard card for a temprature sensor?",
+    "relevant_chunk_ids": [
+      "3b7e80ece8451a6ac97d98628e1bc674082b4c5ab6afb66295971f64419774af",
+      "ef8599ed55594cecc007480ada67694640bc5c7bb7c47498ab0d206c503f5370",
+      "cf0268593a7ac8be966dd297d668a7349aaa26232172b499cfc0da66798a637b"
+    ],
+    "ground_truth_answer": "Edit your dashboard, click 'Add Card', select a 'Gauge' or 'Entity' card, and choose your temperature entity.",
+    "difficulty": "medium",
+    "type": "procedural",
+    "has_typo": true
+  },
+  {
+    "query_id": "rag_015",
+    "query_text": "How do I back up Home Assistant and restore it on new hardware?",
+    "relevant_chunk_ids": [
+      "14d322d2c3fe464b8aefc9edcadacff029e273367a87a73061b08ea996c50f30",
+      "80abc49fb21da97b057e393d5dd82c0abca06dbc2f8a56f059655b2842520fa4",
+      "3b7e80ece8451a6ac97d98628e1bc674082b4c5ab6afb66295971f64419774af"
+    ],
+    "ground_truth_answer": "Create a full backup in Settings > System > Backups, download it, and upload it during the onboarding process on the new hardware.",
+    "difficulty": "medium",
+    "type": "procedural"
+  },
+  {
+    "query_id": "rag_016",
+    "query_text": "How do I configure a custom component in Home Assistant's custom_components folder?",
+    "relevant_chunk_ids": [
+      "7774479f5bfc9cb4d6dba7428845cca6fbddbb6ee2cacbf761507b672539d070",
+      "14d322d2c3fe464b8aefc9edcadacff029e273367a87a73061b08ea996c50f30",
+      "9786f63ccd203240cfd5b5ca1787e49999088554556fb24a8a29e1b899346c46"
+    ],
+    "ground_truth_answer": "Place the component files in the `/config/custom_components/` directory and restart Home Assistant to load the new integration.",
+    "difficulty": "hard",
+    "type": "procedural"
+  },
+  {
+    "query_id": "rag_017",
+    "query_text": "How do I set up a Zigbee2MQTT instance and connect it to Home Assistant via MQTT?",
+    "relevant_chunk_ids": [
+      "6521460febb30a98e896f553b23e56ea778be19e122a1bfaefb4cac6ac0a8d12",
+      "55e797be03ae18d759c34364b1936f71f445972119e8562f5b53287522ce1f71",
+      "0bd07e59e80b8470103bd6d10bc928ae25037609a967f114d16233d34b18c004"
+    ],
+    "ground_truth_answer": "Install Zigbee2MQTT, configure its `mqtt` settings to point to your broker, and ensure 'homeassistant: true' is enabled in the configuration for auto-discovery.",
+    "difficulty": "hard",
+    "type": "procedural"
+  },
+  {
+    "query_id": "rag_018",
+    "query_text": "What is the difference between Zigbee and Z-Wave range and frequency?",
+    "relevant_chunk_ids": [
+      "310ee82bb3c905375a10bdd7caa07228a5c7c7136416e45e75803c3da3bc8069",
+      "4e85023a110ed55c8d35f2018e9b4fc253fdedda055e4d16a9e930320155a60b",
+      "50dd72b64dfc279d2374ac0be72c57cded70f9a795650380a7fd20e905983ceb"
+    ],
+    "ground_truth_answer": "Zigbee operates at 2.4 GHz with shorter range (10-100m), while Z-Wave operates around 900 MHz, offering better wall penetration and range.",
+    "difficulty": "easy",
+    "type": "comparative"
+  },
+  {
+    "query_id": "rag_019",
+    "query_text": "What are the pros and cons of ZHA vs Zigbee2MQTT for managing Zigbee devices?",
+    "relevant_chunk_ids": [
+      "6521460febb30a98e896f553b23e56ea778be19e122a1bfaefb4cac6ac0a8d12",
+      "84e8f5bfaf882da4b43c086b7aa0705bf7a368ac2f7f015a0e29a6b5af9dce61",
+      "4e85023a110ed55c8d35f2018e9b4fc253fdedda055e4d16a9e930320155a60b"
+    ],
+    "ground_truth_answer": "ZHA is easier to set up natively, while Zigbee2MQTT offers broader device support and allows running the Zigbee stack independently of Home Assistant.",
+    "difficulty": "medium",
+    "type": "comparative"
+  },
+  {
+    "query_id": "rag_020",
+    "query_text": "How does Home Assistant compare to openHAB for a beginner?",
+    "relevant_chunk_ids": [
+      "1da29dddc56a7379d3787f652e019264eae2fbda0591c26694448c101886d7f9",
+      "d4e5b0fb27a32ba0207ee51ab3505f901f4e7f8860706658c2ab398e21c9ea4d",
+      "d69d31bbaa077f24550ebcff7d483b0603386b040b1a94bd719863e2141b7ba2"
+    ],
+    "ground_truth_answer": "Home Assistant is generally considered to have a more modern UI and a larger community, making it slightly more beginner-friendly than openHAB.",
+    "difficulty": "medium",
+    "type": "comparative"
+  },
+  {
+    "query_id": "rag_021",
+    "query_text": "What are the trade-offs between local processing and cloud-based automation in Home Assistant?",
+    "relevant_chunk_ids": [
+      "fb87981d627a46e3cdb6be0d5e1bf8cb3b2d1f69c3cf99cc6e6e8de74007abd9",
+      "4e4b825200b1fa86b88910a0dd15ed6c22f1066bac84a6a0baf4f1dcef2926a3",
+      "a1c085b44dd3bb4c5b4890cb109f3ce13471b8c37e78c15589ba5f1866c65109"
+    ],
+    "ground_truth_answer": "Local processing offers better privacy and reliability but can be harder to set up, whereas cloud-based systems offer easier remote access at the cost of dependency on external servers.",
+    "difficulty": "hard",
+    "type": "comparative"
+  },
+  {
+    "query_id": "rag_022",
+    "query_text": "How does Matter compare to Zigbee for a new smart home installation in 2024?",
+    "relevant_chunk_ids": [
+      "87dd76b4886608217e1e13047a039d301b9827d546edaa5fb4616f075c5620fb",
+      "d4e5b0fb27a32ba0207ee51ab3505f901f4e7f8860706658c2ab398e21c9ea4d",
+      "f484dc0e158920aec0bd7649903a4adca40c60c68f78934401e985d2cab6616e"
+    ],
+    "ground_truth_answer": "Matter is a newer IP-based standard designed for cross-ecosystem compatibility, whereas Zigbee is a mature, low-power mesh protocol with a larger existing device ecosystem.",
+    "difficulty": "hard",
+    "type": "comparative"
+  },
+  {
+    "query_id": "rag_023",
+    "query_text": "My Zigbee device keeps showing as unavailble in Home Assistant. What should I check?",
+    "relevant_chunk_ids": [
+      "65fceaeae34119946f01c51b6b717badd57f2bcef6e261e313b5f4103325cdf5",
+      "0127df3612c086173981611283f34692e94ffb10c618c3cf28b64c6fc5cd4d56",
+      "84e8f5bfaf882da4b43c086b7aa0705bf7a368ac2f7f015a0e29a6b5af9dce61"
+    ],
+    "ground_truth_answer": "Check for Wi-Fi interference, ensure your coordinator has the latest firmware, and verify that the device is within range of a Zigbee router.",
+    "difficulty": "easy",
+    "type": "troubleshooting",
+    "has_typo": true
+  },
+  {
+    "query_id": "rag_024",
+    "query_text": "My MQTT messages are not appearing in Home Assistant. How do I debug this?",
+    "relevant_chunk_ids": [
+      "604ef386aee645c6f43be57b217a29c81088734b3020c54cf973f9213789dd10",
+      "664a09edb693a8652a616a4a2333b53812f1d81b70cebea2a42af9915078ed45",
+      "e00874714271ef4eb4dd744243565fd46437547cfe18a796c49dfcc718cfa2b6"
+    ],
+    "ground_truth_answer": "Use a tool like MQTT Explorer to verify messages are reaching the broker, and check the MQTT integration logs in Home Assistant.",
+    "difficulty": "medium",
+    "type": "troubleshooting"
+  },
+  {
+    "query_id": "rag_025",
+    "query_text": "Home Assistant is running slowly after I added 50 Zigbee devices. How do I diagnose and fix this?",
+    "relevant_chunk_ids": [
+      "01087ba428c81a4dafab15c49ddbb936554b43a8d522418f99ab9ff9023ade1c",
+      "664a09edb693a8652a616a4a2333b53812f1d81b70cebea2a42af9915078ed45",
+      "31aa6f1898661b3095d3da55131adb3cefb5883b40f932bfa80ffe640249f7b1"
+    ],
+    "ground_truth_answer": "Diagnose by checking the system monitor for CPU usage, and fix by optimizing the recorder database and ensuring your Zigbee mesh has enough routers.",
+    "difficulty": "hard",
+    "type": "troubleshooting"
+  }
+]

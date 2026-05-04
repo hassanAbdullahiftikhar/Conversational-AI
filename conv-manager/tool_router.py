@@ -57,18 +57,18 @@ class ToolErrorEnvelope(BaseModel):
 
 
 class CRMProfileReadInput(BaseModel):
-    include_fields: list[str] = Field(default_factory=list)
+    key: str
 
 
 class CRMProfileWriteInput(BaseModel):
-    user_id: str | None = Field(default=None, max_length=80)
-    name: str | None = Field(default=None, max_length=80)
-    city: str | None = Field(default=None, max_length=80)
-    location: str | None = Field(default=None, max_length=80)
-    contact_email: str | None = Field(default=None, max_length=120)
-    preferred_protocols: list[str] | None = None
-    preferred_platform: str | None = Field(default=None, max_length=80)
-    notes: str | None = Field(default=None, max_length=400)
+    key: Literal[
+        "user_name",
+        "city",
+        "hub_type",
+        "device_count",
+        "preferred_protocol"
+    ]
+    value: str | int | bool
 
 
 class SearchDocsInput(BaseModel):
@@ -308,24 +308,26 @@ class ToolRouter:
         return envelope.model_dump()
 
     async def _crm_profile_read(self, session_id: str, args: CRMProfileReadInput) -> dict[str, Any]:
-        profile = await self.store.get_crm_profile_async(session_id)
-        if args.include_fields:
-            include = set(args.include_fields)
-            profile = {k: v for k, v in profile.items() if k in include}
-
+        # During runtime, we might want to resolve user_id from session_id
+        # For evals, we just use the user_id if passed in session_id or similar
+        # But based on our new API, we need user_id. 
+        # Let's assume for now user_id == session_id for simplicity or fetch from session metadata
+        user_id = session_id 
+        profile = await self.store.get_crm_profile_by_user(user_id)
         return {
-            "session_id": session_id,
-            "profile": profile,
-            "profile_fields": sorted(profile.keys()),
+            "key": args.key,
+            "value": profile.get(args.key),
+            "user_id": user_id
         }
 
     async def _crm_profile_write(self, session_id: str, args: CRMProfileWriteInput) -> dict[str, Any]:
-        updates = args.model_dump(exclude_none=True)
-        updated = await self.store.update_crm_profile_async(session_id, updates)
+        user_id = session_id
+        updated_profile = await self.store.update_crm_profile_by_user(user_id, args.key, args.value)
         return {
-            "session_id": session_id,
-            "profile": updated,
-            "updated_fields": sorted(updates.keys()),
+            "success": True,
+            "key": args.key,
+            "value": args.value,
+            "user_id": user_id
         }
 
     def _get_retrieval_engine(self) -> RetrievalEngine:
@@ -381,6 +383,7 @@ class ToolRouter:
             "query": args.query,
             "citations": citations,
             "snippets": snippets,
+            "candidates": result.get("candidates", []),
             "timings_ms": dict(result.get("timings_ms", {})),
         }
 

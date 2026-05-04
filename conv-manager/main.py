@@ -4,7 +4,8 @@ import asyncio
 import logging
 import re
 
-from fastapi import Depends, FastAPI
+from typing import Any
+from fastapi import Depends, FastAPI, Response
 from pydantic import BaseModel, Field
 
 from history_manager import HistoryManager
@@ -172,6 +173,32 @@ def create_session(payload: SessionRequest) -> dict:
     except Exception as exc:
         logger.exception("action=create_session_failed session_id=%s error=%s", payload.session_id, type(exc).__name__)
         raise
+
+
+class CrmWriteRequest(BaseModel):
+    key: str
+    value: Any
+
+
+@app.get("/internal/crm/{user_id}/{key}")
+async def crm_read(user_id: str, key: str, store: SessionStore = Depends(get_store)) -> dict:
+    profile = await store.get_crm_profile_by_user(user_id)
+    if key not in profile:
+        from fastapi import Response
+        return Response(status_code=404)
+    return {"value": profile[key]}
+
+
+@app.post("/internal/crm/{user_id}")
+async def crm_write(user_id: str, payload: CrmWriteRequest, store: SessionStore = Depends(get_store)) -> dict:
+    profile = await store.update_crm_profile_by_user(user_id, payload.key, payload.value)
+    return {"success": True, "profile": profile}
+
+
+@app.delete("/internal/crm/{user_id}/{key}")
+async def crm_delete(user_id: str, key: str, store: SessionStore = Depends(get_store)) -> dict:
+    await store.delete_crm_key_by_user(user_id, key)
+    return {"success": True}
 
 
 @app.delete("/internal/delete-session/{session_id}")

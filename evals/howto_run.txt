@@ -1,0 +1,35 @@
+1. To check/change the query range for RAGAS:
+   Check line 70 in evals\suite2_rag\test_faithfulness.py: `for query in rag_queries[:1]:`
+
+2. Manual Test Commands (Run from project root):
+
+--- Suite 2: RAG (Retrieval & Grounding) ---
+# Test retrieval hit rate
+.\venv\Scripts\python -m pytest -s evals/suite2_rag/test_retrieval.py
+
+# Test LLM Faithfulness (Ragas)
+.\venv\Scripts\python -m pytest -s evals/suite2_rag/test_faithfulness.py
+
+--- Suite 3: CRM (User Profiles) ---
+# Test CRM database operations
+.\venv\Scripts\python -m pytest -s evals/suite3_crm/test_crm_crud.py
+
+# Test CRM LLM tool triggering
+.\venv\Scripts\python -m pytest -s evals/suite3_crm/test_crm_llm_invocation.py
+
+--- Suite 4: Tools (Calculator & Search) ---
+# Test tool logic units
+.\venv\Scripts\python -m pytest -s evals/suite4_tools/test_tool_units.py
+
+# Test LLM tool-calling accuracy
+.\venv\Scripts\python -m pytest -s evals/suite4_tools/test_tool_llm_invocation.py
+
+--- Suite 5: Latency & Load ---
+# Test scenario-based latency (TTFT, E2E)
+.\venv\Scripts\python -m pytest -s evals/suite5_latency/test_latency_scenarios.py
+
+# Run Locust Load Test (1 minute, 10 users)
+.\venv\Scripts\locust -f evals/suite5_latency/locustfile.py --headless -u 10 -r 1 --run-time 1m --host http://localhost:8000 --csv evals/reports/locust_run
+
+# Analyze Locust results and generate graph
+.\venv\Scripts\python evals/suite5_latency/analyze_locust.py --csv-prefix evals/reports/locust_run
